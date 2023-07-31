@@ -1,0 +1,35 @@
+{
+  "name": "gb-nfts",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "NODE_OPTIONS='--inspect' next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "@nfteyez/sol-rayz": "^0.10.2",
+    "@reach/dialog": "^0.18.0",
+    "@solana/wallet-adapter-base": "^0.9.22",
+    "@solana/wallet-adapter-react": "^0.15.32",
+    "@solana/wallet-adapter-react-ui": "^0.9.31",
+    "@solana/wallet-adapter-wallets": "^0.19.16",
+    "@solana/web3.js": "^1.75.0",
+    "axios": "^1.4.0",
+    "eslint": "8.39.0",
+    "eslint-config-next": "13.3.1",
+    "next": "13.3.1",
+    "react": "18.2.0",
+    "react-dom": "18.2.0",
+    "react-responsive": "^9.0.2"
+  },
+  "devDependencies": {
+    "typescript": "5.0.4",
+    "@types/node": "18.16.2",
+    "@types/react": "18.2.0",
+    "@types/react-dom": "18.2.1",
+    "@metaplex-foundation/js": "^0.18.3",
+    "dotenv": "^16.0.3"
+  }
+}

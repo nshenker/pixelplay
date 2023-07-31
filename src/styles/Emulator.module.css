@@ -1,0 +1,30 @@
+.whiteButton {
+  border-radius: 50%;
+  background: white;
+  color: black;
+  height: 30px;
+  width: 30px;
+  font-family: "IBM Plex Mono", monospace;
+  margin: 5px;
+  paddingleft: 5px;
+  padding: 5px;
+  text-align: center;
+}
+
+.text {
+  font-family: "IBM Plex Mono", monospace;
+  margin: 5px;
+  padding: 5px;
+}
+
+.pillShape {
+  width: 65px;
+  color: black;
+  height: 30px;
+  background: white;
+  border-radius: 15px;
+  font-family: "IBM Plex Mono", monospace;
+  margin: 5px;
+  padding: 5px;
+  text-align: center;
+}

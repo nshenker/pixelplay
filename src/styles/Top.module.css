@@ -1,0 +1,24 @@
+@import url("https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap");
+
+.gridWrapper {
+  max-width: 800px;
+  margin: 0 auto;
+  display: flex;
+  flex-grow: 1;
+  flex-direction: column;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  grid-gap: 20px;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  height: 100vh;
+}
+
+.gridItem {
+  padding: 20px;
+  text-align: center;
+}
