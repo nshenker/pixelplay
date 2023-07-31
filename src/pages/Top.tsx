@@ -44,7 +44,7 @@ export const Top = () => {
     display: "inline-block", // Adjust display to inline-block for the box to fit the text
   }}
 >
-  Degen Boy Color
+  Pixel Industries
 </h1>
           {games.length > 0 &&
               <div className={styles.grid}>
