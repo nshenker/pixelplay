@@ -111,7 +111,7 @@ const Emulator = ({
               }}
             >
               <span className={styles.text}>A:</span>
-              <span className={styles.whiteButton}>X</span>
+              <span className={styles.whiteButton}>Z</span>
             </div>
             <div
               style={{
@@ -123,7 +123,7 @@ const Emulator = ({
               }}
             >
               <span className={styles.text}>B:</span>
-              <span className={styles.whiteButton}>Z</span>
+              <span className={styles.whiteButton}>X</span>
             </div>
             <div
               style={{
