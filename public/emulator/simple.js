@@ -69,8 +69,8 @@ const controllerEl = $("#controller");
 const dpadEl = $("#controller_dpad");
 const selectEl = $("#controller_select");
 const startEl = $("#controller_start");
-const bEl = $("#controller_b");
-const aEl = $("#controller_a");
+const bEl = $("#controller_a");
+const aEl = $("#controller_b");
 
 const binjgbPromise = Binjgb();
 
