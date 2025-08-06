@@ -1,4 +1,4 @@
-import styles from "@/styles/Top.module.css";
+ianimport styles from "@/styles/Top.module.css";
 import {  useState } from "react";
 import { useGetNfts } from "@/nfts/GetNfts";
 import GameCard from "@/components/GameCard";
@@ -44,7 +44,7 @@ export const Top = () => {
     display: "inline-block", // Adjust display to inline-block for the box to fit the text
   }}
 >
-  Pixel Industries
+  Veridian City Studios
 </h1>
           {games.length > 0 &&
               <div className={styles.grid}>
