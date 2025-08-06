@@ -30,7 +30,7 @@ export const useGetNfts = () => {
         limit: 1000
       }
     };
-    const {data} = await axios.post(process.env.NEXT_PUBLIC_DATA_ASSET_API!, requestBody);
+    const {data} = await axios.post(process.env.NEXT_PUBLIC_RPC!, requestBody);
     const assets = data.result.items;
     const nftInfos = assets.map((nftAccount: any) => {
         const games = nftAccount.content.files.filter((f: any) => f.mime?.includes('x-gb-rom'));
