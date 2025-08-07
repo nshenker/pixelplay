@@ -1,30 +1,235 @@
-.whiteButton {
+/* --- Color and Sizing Variables --- */
+:root {
+  --gb-body-color: #d2d3c9;
+  --gb-dark-gray: #82837d;
+  --gb-screen-bezel: #2d2d2d;
+  --gb-screen-color: #9bbc0f;
+  --gb-button-color: #b32957;
+  --gb-button-shadow: #7c1c3d;
+  --gb-pill-button: #4a4a50;
+  --gb-font-color: #4a6aca;
+}
+
+/* --- Main Dialog and Body --- */
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: #00000077;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 100;
+}
+
+.gameboyBody {
+  position: relative;
+  width: 340px;
+  height: 560px;
+  background-color: var(--gb-body-color);
+  border-radius: 12px 12px 80px 12px;
+  border: 2px solid #b0b1a9;
+  box-shadow: inset 2px 2px 0px #e1e2da, inset -2px -2px 0px #70716c;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  box-sizing: border-box;
+}
+
+/* --- Top Bezel Details --- */
+.topBezel {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  color: #a0a199;
+  font-size: 10px;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+.topBezelIndentLeft, .topBezelIndentRight {
+  width: 60px;
+  height: 5px;
+  background: #b0b1a9;
+  border-radius: 3px;
+}
+
+/* --- Screen Area --- */
+.screenBezel {
+  width: 100%;
+  background: var(--gb-dark-gray);
+  border-radius: 12px 12px 40px 12px;
+  padding: 10px;
+  box-shadow: inset 2px 2px 4px #00000080;
+  border: 1px solid #70716c;
+}
+
+.screenIndicator {
+  display: flex;
+  align-items: center;
+  margin-left: 10px;
+  margin-bottom: 5px;
+}
+
+.powerLight {
+  width: 8px;
+  height: 8px;
+  background: #c3270a;
   border-radius: 50%;
-  background: white;
-  color: black;
-  height: 30px;
-  width: 30px;
-  font-family: "IBM Plex Mono", monospace;
-  margin: 5px;
-  paddingleft: 5px;
-  padding: 5px;
-  text-align: center;
+  margin-right: 5px;
+  border: 1px solid #771806;
 }
 
-.text {
-  font-family: "IBM Plex Mono", monospace;
-  margin: 5px;
-  padding: 5px;
+.powerText {
+  color: #d2d3c9;
+  font-size: 8px;
+  font-weight: bold;
 }
 
-.pillShape {
-  width: 65px;
-  color: black;
-  height: 30px;
-  background: white;
-  border-radius: 15px;
-  font-family: "IBM Plex Mono", monospace;
-  margin: 5px;
-  padding: 5px;
+.screenContainer {
+  background: var(--gb-screen-color);
+  padding: 20px;
+  border-radius: 4px;
+}
+
+.emulatorScreen {
+  display: block;
+  width: 100%;
+  height: 220px;
+  border: none;
+  background-color: transparent; /* Emulator iframe should be transparent */
+}
+
+.brandLogo {
+  color: var(--gb-font-color);
+  font-size: 14px;
+  font-weight: bold;
   text-align: center;
+  margin-top: 10px;
+  font-family: 'Arial', sans-serif;
+}
+
+.logoGameboy {
+  font-style: italic;
+  font-size: 17px;
+}
+
+/* --- Nintendo Logo --- */
+.nintendoLogo {
+  margin-top: 15px;
+  color: var(--gb-font-color);
+  font-family: 'Arial', sans-serif; /* Use a font that looks similar */
+  font-weight: 900;
+  font-style: italic;
+  font-size: 20px;
+  letter-spacing: -1px;
+}
+
+.nintendoLogo span {
+  border: 2px solid var(--gb-font-color);
+  border-radius: 12px;
+  padding: 0 8px;
+}
+
+/* --- Controls Area --- */
+.controlsContainer {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 20px;
+  padding: 0 5px;
+}
+
+.dpad {
+  position: relative;
+  width: 75px;
+  height: 75px;
+}
+
+.dpad div {
+  background-color: #2d2d2d;
+  position: absolute;
+  box-shadow: 1px 1px 0 #000;
+}
+
+.dpadUp, .dpadDown { width: 25px; height: 25px; left: 25px; }
+.dpadLeft, .dpadRight { width: 25px; height: 25px; top: 25px; }
+.dpadUp { top: 0; border-radius: 4px 4px 0 0; }
+.dpadDown { bottom: 0; border-radius: 0 0 4px 4px; }
+.dpadLeft { left: 0; border-radius: 4px 0 0 4px; }
+.dpadRight { right: 0; border-radius: 0 4px 4px 0; }
+.dpadCenter {
+  width: 25px; height: 25px; top: 25px; left: 25px; z-index: 1;
+}
+
+.abButtons {
+  display: flex;
+  align-items: center;
+  transform: rotate(-25deg);
+}
+
+.buttonA, .buttonB {
+  width: 45px;
+  height: 45px;
+  background-color: var(--gb-button-color);
+  border-radius: 50%;
+  margin: 5px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-family: sans-serif;
+  color: white;
+  font-size: 20px;
+  font-weight: bold;
+  border: 2px solid #2d2d2d;
+  box-shadow: 2px 2px 0 var(--gb-button-shadow), inset 1px 1px 0 #e46d91;
+}
+.buttonB { margin-right: 15px; }
+
+
+/* --- Start/Select Buttons --- */
+.startSelectContainer {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    gap: 25px;
+    margin-top: 15px;
+}
+.pillButtonWrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    color: var(--gb-font-color);
+    font-size: 12px;
+    font-weight: bold;
+}
+.pillButton {
+    width: 35px;
+    height: 12px;
+    background: var(--gb-pill-button);
+    border-radius: 6px;
+    border: 1px solid #2d2d2d;
+    transform: rotate(-25deg);
+    margin-bottom: 5px;
+}
+
+/* --- Speaker Grill --- */
+.speaker {
+    position: absolute;
+    bottom: 18px;
+    right: 25px;
+    width: 60px;
+    height: 50px;
+    transform: rotate(-25deg);
+    background-image: repeating-linear-gradient(
+        135deg,
+        #b0b1a9,
+        #b0b1a9 4px,
+        #a0a199 4px,
+        #a0a199 8px
+    );
 }
