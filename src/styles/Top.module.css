@@ -1,24 +1,84 @@
-@import url("https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap");
+/* Import the Google Font at the top of your main CSS file or in your _app.tsx layout */
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
 
-.gridWrapper {
-  max-width: 800px;
-  margin: 0 auto;
+.container {
   display: flex;
-  flex-grow: 1;
   flex-direction: column;
+  align-items: center;
+  padding: 20px;
+  width: 100%;
 }
 
+.header {
+  font-family: 'Press Start 2P', cursive;
+  color: #333333;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+  background-color: #ffffff;
+  padding: 15px 25px;
+  margin-top: 30px;
+  margin-bottom: 50px;
+  text-align: center;
+  display: inline-block;
+  border: 3px solid #333;
+  box-shadow: 5px 5px 0px rgba(0, 0, 0, 0.7);
+}
+
+/* --- Game Grid Styles --- */
 .grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  grid-gap: 20px;
-  list-style: none;
-  padding: 0;
-  margin: 0;
-  height: 100vh;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 20px;
+  width: 100%;
+  max-width: 1200px;
 }
 
 .gridItem {
-  padding: 20px;
+  display: flex;
+  justify-content: center;
+}
+
+/* --- No Games Message Styles --- */
+.noGamesContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin-top: 50px;
+  gap: 25px;
+}
+
+.pixelatedText {
+  font-family: 'Press Start 2P', cursive;
+  color: black;
+  background-color: white;
+  padding: 15px;
   text-align: center;
+  display: inline-block;
+  border: 2px solid black;
+}
+
+.pixelatedButton {
+  font-family: 'Press Start 2P', cursive;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  font-size: 14px;
+  color: #fff;
+  background-color: #312f48;
+  border: 2px solid #000;
+  padding: 15px 30px;
+  cursor: pointer;
+  outline: none;
+  position: relative;
+  transition: all 0.2s ease;
+}
+
+.pixelatedButton:hover {
+  background-color: #4a4766;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 0 #000;
+}
+
+.pixelatedButton:active {
+  transform: translateY(1px);
+  box-shadow: none;
 }
