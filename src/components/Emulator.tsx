@@ -15,8 +15,8 @@ const Emulator = ({
   rom: string | null;
 }) => {
   const iframe = useRef<HTMLIFrameElement>(null);
-  // We can use this to slightly adjust size, but the Game Boy layout will be responsive.
-  const isPhone = useMediaQuery({ query: "(max-width: 600px)" });
+  // Use media query to scale down the entire component on smaller screens
+  const isPhone = useMediaQuery({ query: "(max-width: 480px)" });
 
   const startRom = () => {
     if (!iframe.current?.contentWindow) return;
@@ -31,70 +31,79 @@ const Emulator = ({
       isOpen={showDialog}
       onDismiss={onDismiss}
     >
-      <DialogContent aria-label="Game Boy Emulator" className={styles.gameboyBody}>
-        {/* Top edge details */}
-        <div className={styles.topBezel}>
-          <div className={styles.topBezelIndentLeft}></div>
-          <span>ON & OFF</span>
-          <div className={styles.topBezelIndentRight}></div>
-        </div>
-
-        {/* Screen Area */}
-        <div className={styles.screenBezel}>
-          <div className={styles.screenIndicator}>
-            <div className={styles.powerLight}></div>
-            <span className={styles.powerText}>BATTERY</span>
-          </div>
-          <div className={styles.screenContainer}>
-            <iframe
-              onLoad={startRom}
-              ref={iframe}
-              key={romKey}
-              className={styles.emulatorScreen}
-              src={"/emulator/simple.html"}
-              title="Emulator Screen"
-            />
-          </div>
-          <div className={styles.brandLogo}>
-            Nintendo <span className={styles.logoGameboy}>GAME BOY</span>™
-          </div>
-        </div>
-
-        {/* Nintendo Logo below screen */}
-        <div className={styles.nintendoLogo}>
-          <span>Nintendo</span>
-        </div>
-
-        {/* Controls Area */}
-        <div className={styles.controlsContainer}>
-          <div className={styles.dpad}>
-            <div className={styles.dpadUp}></div>
-            <div className={styles.dpadLeft}></div>
-            <div className={styles.dpadRight}></div>
-            <div className={styles.dpadDown}></div>
-            <div className={styles.dpadCenter}></div>
+      <DialogContent
+        aria-label="Game Boy Emulator"
+        className={styles.dialogContent}
+        style={{ transform: isPhone ? "scale(0.9)" : "scale(1)" }}
+      >
+        {/* Main Game Boy Body */}
+        <div className={styles.gameboy}>
+          <div className={styles.bodyTop}>
+            <div className={styles.bodyLine} />
+            <div className={styles.bodyLine} />
+            <div className={styles.bodyLine} />
+            <div className={styles.bodyLine} />
+            <div className={styles.bodyLine} />
           </div>
 
-          <div className={styles.abButtons}>
-            <div className={styles.buttonB}><span>B</span></div>
-            <div className={styles.buttonA}><span>A</span></div>
-          </div>
-        </div>
-
-        {/* Start/Select Buttons */}
-        <div className={styles.startSelectContainer}>
-            <div className={styles.pillButtonWrapper}>
-                <div className={styles.pillButton}></div>
-                <span>SELECT</span>
+          {/* Screen Area */}
+          <div className={styles.screenArea}>
+            <div className={styles.powerLed}></div>
+            <div className={styles.screenDisplay}>
+              <iframe
+                onLoad={startRom}
+                ref={iframe}
+                key={romKey}
+                className={styles.emulatorFrame}
+                src={"/emulator/simple.html"}
+                title="Emulator Screen"
+              />
             </div>
-            <div className={styles.pillButtonWrapper}>
-                <div className={styles.pillButton}></div>
-                <span>START</span>
-            </div>
-        </div>
+            <p className={styles.screenText}>DOT MATRIX WITH STEREO SOUND</p>
+          </div>
 
-        {/* Speaker Grill */}
-        <div className={styles.speaker}></div>
+          {/* Logo */}
+          <div className={styles.logo}>
+            Nintendo <span className={styles.logoGameboy}>GAME BOY</span>
+            <span className={styles.logoTm}>™</span>
+          </div>
+
+          {/* Controls Area */}
+          <div className={styles.controls}>
+            {/* D-Pad */}
+            <div className={styles.dpad}></div>
+
+            {/* A & B Buttons */}
+            <div className={styles.abButtons}>
+              <div className={styles.buttonB}>
+                <span>B</span>
+              </div>
+              <div className={styles.buttonA}>
+                <span>A</span>
+              </div>
+            </div>
+          </div>
+
+          {/* Start/Select Buttons */}
+          <div className={styles.startSelectArea}>
+            <div className={styles.buttonSelect}>
+              <span>SELECT</span>
+            </div>
+            <div className={styles.buttonStart}>
+              <span>START</span>
+            </div>
+          </div>
+          
+          {/* Speaker Grill */}
+          <div className={styles.speaker}>
+            <div className={styles.speakerLine}></div>
+            <div className={styles.speakerLine}></div>
+            <div className={styles.speakerLine}></div>
+            <div className={styles.speakerLine}></div>
+            <div className={styles.speakerLine}></div>
+            <div className={styles.speakerLine}></div>
+          </div>
+        </div>
       </DialogContent>
     </DialogOverlay>
   );
