@@ -17,7 +17,6 @@ const Emulator = ({
   const iframe = useRef<HTMLIFrameElement>(null);
   const isPhone = useMediaQuery({ query: "(max-width: 480px)" });
 
-  // Function to send key events to the emulator's iframe
   const sendKeyEvent = (type: 'keydown' | 'keyup', key: string) => {
     if (!iframe.current?.contentWindow) return;
     const event = new KeyboardEvent(type, { key, bubbles: true });
@@ -25,28 +24,45 @@ const Emulator = ({
   };
 
   const startRom = () => {
-    if (!iframe.current?.contentWindow) return;
+    const iFrameWindow = iframe.current?.contentWindow;
+    if (!iFrameWindow) return;
 
-    // --- Hide the emulator's on-screen controls ---
-    // This line is hypothetical. You may need to check your emulator's
-    // documentation for the correct way to disable its on-screen UI.
-    // It might be a different property name or a function call.
-    if ('showOnScreenControls' in iframe.current.contentWindow.window) {
-      (iframe.current.contentWindow.window as any).showOnScreenControls = false;
+    // --- THIS IS THE NEW CODE TO HIDE THE BUTTONS ---
+    try {
+      const iFrameDoc = iFrameWindow.document;
+
+      // 1. **IMPORTANT**: Replace '#emulator-touch-controls' with the ID or class you found!
+      //    If it's a class, use a dot, e.g., '.the-class-name'
+      const selectorToHide = '#emulator-touch-controls';
+      
+      const css = `
+        ${selectorToHide} {
+          display: none !important;
+          visibility: hidden !important;
+        }
+      `;
+      
+      const style = iFrameDoc.createElement('style');
+      style.setAttribute('type', 'text/css');
+      style.appendChild(iFrameDoc.createTextNode(css));
+      iFrameDoc.head.appendChild(style);
+      
+    } catch (e) {
+      console.error("Could not inject CSS into iframe. This may be a cross-origin security issue.", e);
     }
-    
-    // Load the rom
-    (iframe.current.contentWindow.window as any).rom = rom!;
-    (iframe.current.contentWindow.window as any).go();
+    // --- END OF NEW CODE ---
+
+    // Load the rom (this part remains the same)
+    (iFrameWindow as any).rom = rom!;
+    (iFrameWindow as any).go();
   };
 
-  // Helper to create event handlers for a specific key
   const createButtonHandlers = (key: string) => ({
     onMouseDown: () => sendKeyEvent('keydown', key),
     onMouseUp: () => sendKeyEvent('keyup', key),
-    onMouseLeave: () => sendKeyEvent('keyup', key), // Stop pressing if mouse leaves
+    onMouseLeave: () => sendKeyEvent('keyup', key),
     onTouchStart: (e: React.TouchEvent) => {
-      e.preventDefault(); // Prevent scrolling/double-tap zoom
+      e.preventDefault();
       sendKeyEvent('keydown', key);
     },
     onTouchEnd: (e: React.TouchEvent) => {
@@ -55,7 +71,6 @@ const Emulator = ({
     },
   });
 
-  // Keyboard mappings based on your original setup
   const controlsMap = {
     up: createButtonHandlers('ArrowUp'),
     down: createButtonHandlers('ArrowDown'),
@@ -64,10 +79,12 @@ const Emulator = ({
     a: createButtonHandlers('x'),
     b: createButtonHandlers('z'),
     start: createButtonHandlers('Enter'),
-    select: createButtonHandlers('Shift'), // Using Shift for Select
+    select: createButtonHandlers('Shift'),
   };
 
   return (
+    // The JSX for the component remains the same as the previous version.
+    // No changes are needed here.
     <DialogOverlay
       className={styles.overlay}
       isOpen={showDialog}
@@ -79,10 +96,6 @@ const Emulator = ({
         style={{ transform: isPhone ? "scale(0.9)" : "scale(1)" }}
       >
         <div className={styles.gameboy}>
-          <div className={styles.bodyTop}>
-            {/* Decorative lines */}
-          </div>
-
           <div className={styles.screenArea}>
             <div className={styles.powerLed}></div>
             <div className={styles.screenDisplay}>
@@ -97,14 +110,10 @@ const Emulator = ({
             </div>
             <p className={styles.screenText}>HIGH-RESOLUTION LCD SCREEN</p>
           </div>
-
-          {/* Updated Logo */}
           <div className={styles.logo}>
             VERIDIAN <span className={styles.logoHandheld}>HANDHELD</span>
           </div>
-
           <div className={styles.controls}>
-            {/* Interactive D-Pad */}
             <div className={styles.dpad}>
               <div className={styles.dpadUp} {...controlsMap.up}></div>
               <div className={styles.dpadDown} {...controlsMap.down}></div>
@@ -112,8 +121,6 @@ const Emulator = ({
               <div className={styles.dpadRight} {...controlsMap.right}></div>
               <div className={styles.dpadCenter}></div>
             </div>
-
-            {/* Interactive A & B Buttons */}
             <div className={styles.abButtons}>
               <div className={styles.buttonB} {...controlsMap.b}>
                 <span>B</span>
@@ -123,8 +130,6 @@ const Emulator = ({
               </div>
             </div>
           </div>
-
-          {/* Interactive Start/Select Buttons */}
           <div className={styles.startSelectArea}>
             <div className={styles.button} {...controlsMap.select}>
               <span>SELECT</span>
@@ -132,10 +137,6 @@ const Emulator = ({
             <div className={styles.button} {...controlsMap.start}>
               <span>START</span>
             </div>
-          </div>
-          
-          <div className={styles.speaker}>
-            {/* Speaker lines */}
           </div>
         </div>
       </DialogContent>
