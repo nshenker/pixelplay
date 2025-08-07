@@ -17,74 +17,95 @@ const Emulator = ({
   const iframe = useRef<HTMLIFrameElement>(null);
   const isPhone = useMediaQuery({ query: "(max-width: 480px)" });
 
-  const sendKeyEvent = (type: 'keydown' | 'keyup', key: string) => {
-    if (!iframe.current?.contentWindow) return;
-    const event = new KeyboardEvent(type, { key, bubbles: true });
-    iframe.current.contentWindow.document.dispatchEvent(event);
-  };
-
   const startRom = () => {
     const iFrameWindow = iframe.current?.contentWindow;
     if (!iFrameWindow) return;
 
-    // --- THIS IS THE NEW CODE TO HIDE THE BUTTONS ---
+    // This function now only injects CSS and loads the ROM.
     try {
       const iFrameDoc = iFrameWindow.document;
+      
+      // --- CSS to Reposition Emulator Controls ---
 
-      // 1. **IMPORTANT**: Replace '#emulator-touch-controls' with the ID or class you found!
-      //    If it's a class, use a dot, e.g., '.the-class-name'
-      const selectorToHide = '#emulator-touch-controls';
+      // Step 1: Replace these placeholder selectors with the real ones from your emulator.
+      const selectors = {
+        container: '#touch-controls-container',
+        up: '.btn-up',
+        down: '.btn-down',
+        left: '.btn-left',
+        right: '.btn-right',
+        a: '.btn-a',
+        b: '.btn-b',
+        start: '.btn-start',
+        select: '.btn-select',
+      };
       
+      // Step 2: This CSS string will be injected into the iframe.
+      // The `top`, `left`, `width`, `height` values are estimates.
+      // You will need to adjust them to perfectly align with your shell buttons.
       const css = `
-        ${selectorToHide} {
-          display: none !important;
-          visibility: hidden !important;
+        /* Tip: Keep this background color while you adjust positions, then set to transparent. */
+        .debug-overlay {
+          background: rgba(0, 255, 0, 0.25) !important; 
+          border: 1px dashed lime !important;
+          border-radius: 0 !important;
         }
+
+        /* Make the controls container a transparent full-screen overlay */
+        ${selectors.container} {
+          position: absolute !important;
+          top: 0 !important;
+          left: 0 !important;
+          width: 400px !important;  /* Match gameboy width */
+          height: 660px !important; /* Match gameboy height */
+          background: none !important;
+          border: none !important;
+          z-index: 10 !important;
+          pointer-events: none; /* Allow clicks to pass through container */
+        }
+        
+        /* Make all direct children of the container into positioned, clickable overlays */
+        ${selectors.container} > * {
+          pointer-events: auto !important; /* Make buttons clickable again */
+          position: absolute !important;
+          opacity: 0 !important; /* Make the original button graphics invisible */
+          -webkit-tap-highlight-color: transparent; /* Remove blue flash on mobile tap */
+        }
+        
+        /* --- Position and Size Each Button Overlay --- */
+
+        /* D-Pad Overlays */
+        ${selectors.up}    { top: 415px; left: 60px; width: 30px; height: 35px; }
+        ${selectors.down}  { top: 470px; left: 60px; width: 30px; height: 35px; }
+        ${selectors.left}  { top: 445px; left: 25px; width: 35px; height: 30px; }
+        ${selectors.right} { top: 445px; left: 90px; width: 35px; height: 30px; }
+        
+        /* A & B Button Overlays */
+        ${selectors.a} { top: 430px; left: 285px; width: 48px; height: 48px; border-radius: 50%; }
+        ${selectors.b} { top: 455px; left: 230px; width: 48px; height: 48px; border-radius: 50%; }
+        
+        /* Start & Select Overlays */
+        ${selectors.select} { top: 520px; left: 130px; width: 50px; height: 20px; transform: rotate(-25deg); }
+        ${selectors.start}  { top: 520px; left: 195px; width: 50px; height: 20px; transform: rotate(-25deg); }
       `;
-      
+
       const style = iFrameDoc.createElement('style');
       style.setAttribute('type', 'text/css');
       style.appendChild(iFrameDoc.createTextNode(css));
       iFrameDoc.head.appendChild(style);
       
     } catch (e) {
-      console.error("Could not inject CSS into iframe. This may be a cross-origin security issue.", e);
+      console.error("Could not inject CSS into iframe.", e);
     }
-    // --- END OF NEW CODE ---
 
-    // Load the rom (this part remains the same)
+    // Load the rom
     (iFrameWindow as any).rom = rom!;
     (iFrameWindow as any).go();
   };
 
-  const createButtonHandlers = (key: string) => ({
-    onMouseDown: () => sendKeyEvent('keydown', key),
-    onMouseUp: () => sendKeyEvent('keyup', key),
-    onMouseLeave: () => sendKeyEvent('keyup', key),
-    onTouchStart: (e: React.TouchEvent) => {
-      e.preventDefault();
-      sendKeyEvent('keydown', key);
-    },
-    onTouchEnd: (e: React.TouchEvent) => {
-      e.preventDefault();
-      sendKeyEvent('keyup', key);
-    },
-  });
-
-  const controlsMap = {
-    up: createButtonHandlers('ArrowUp'),
-    down: createButtonHandlers('ArrowDown'),
-    left: createButtonHandlers('ArrowLeft'),
-    right: createButtonHandlers('ArrowRight'),
-    a: createButtonHandlers('x'),
-    b: createButtonHandlers('z'),
-    start: createButtonHandlers('Enter'),
-    select: createButtonHandlers('Shift'),
-  };
 
   return (
-    // The JSX for the component remains the same as the previous version.
-    // No changes are needed here.
+    // The JSX is now purely visual, with no interactive props.
     <DialogOverlay
       className={styles.overlay}
       isOpen={showDialog}
@@ -115,28 +136,20 @@ const Emulator = ({
           </div>
           <div className={styles.controls}>
             <div className={styles.dpad}>
-              <div className={styles.dpadUp} {...controlsMap.up}></div>
-              <div className={styles.dpadDown} {...controlsMap.down}></div>
-              <div className={styles.dpadLeft} {...controlsMap.left}></div>
-              <div className={styles.dpadRight} {...controlsMap.right}></div>
+              <div className={styles.dpadUp}></div>
+              <div className={styles.dpadDown}></div>
+              <div className={styles.dpadLeft}></div>
+              <div className={styles.dpadRight}></div>
               <div className={styles.dpadCenter}></div>
             </div>
             <div className={styles.abButtons}>
-              <div className={styles.buttonB} {...controlsMap.b}>
-                <span>B</span>
-              </div>
-              <div className={styles.buttonA} {...controlsMap.a}>
-                <span>A</span>
-              </div>
+              <div className={styles.buttonB}><span>B</span></div>
+              <div className={styles.buttonA}><span>A</span></div>
             </div>
           </div>
           <div className={styles.startSelectArea}>
-            <div className={styles.button} {...controlsMap.select}>
-              <span>SELECT</span>
-            </div>
-            <div className={styles.button} {...controlsMap.start}>
-              <span>START</span>
-            </div>
+            <div className={styles.button}><span>SELECT</span></div>
+            <div className={styles.button}><span>START</span></div>
           </div>
         </div>
       </DialogContent>
