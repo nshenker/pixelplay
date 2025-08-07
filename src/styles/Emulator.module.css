@@ -36,7 +36,7 @@
   flex-direction: column;
   position: relative;
   font-family: 'Arial', 'Helvetica Neue', 'Helvetica', sans-serif;
-  user-select: none; /* Prevents text selection when clicking buttons */
+  user-select: none;
 }
 
 /* Screen Area */
@@ -51,7 +51,7 @@
 .powerLed {
   width: 10px;
   height: 10px;
-  background-color: #32cd32; /* Veridian Green */
+  background-color: #32cd32;
   border-radius: 50%;
   position: absolute;
   top: 50px;
@@ -60,7 +60,7 @@
 }
 
 .screenDisplay {
-  background-color: #9bbc0f;
+  background-color: #0f380f; /* Darker, more authentic green */
   height: 288px;
   width: 320px;
   margin: 0 auto;
@@ -84,10 +84,9 @@
   letter-spacing: 0.5px;
 }
 
-/* Updated Logo */
 .logo {
-  font-family: 'Exo 2', 'Arial Black', sans-serif; /* A more modern, techy font */
-  color: #004d40; /* Dark teal */
+  font-family: 'Exo 2', 'Arial Black', sans-serif;
+  color: #004d40;
   font-weight: 700;
   font-size: 22px;
   text-align: center;
@@ -109,7 +108,6 @@
   padding: 0 10px;
 }
 
-/* --- Refactored D-Pad for Interaction --- */
 .dpad {
   width: 90px;
   height: 90px;
@@ -121,6 +119,7 @@
   box-shadow: inset 0 0 5px rgba(0,0,0,0.5);
   cursor: pointer;
   border-radius: 5px;
+  -webkit-tap-highlight-color: transparent;
 }
 .dpad div:active {
   background-color: #555;
@@ -139,7 +138,6 @@
   box-shadow: inset 0 0 5px rgba(0,0,0,0.5);
 }
 
-/* A and B Buttons */
 .abButtons {
   width: 130px;
   height: 60px;
@@ -153,7 +151,7 @@
 .buttonA, .buttonB {
   width: 48px;
   height: 48px;
-  background-color: #556b2f; /* Dark Olive Green */
+  background-color: #556b2f;
   border-radius: 50%;
   color: white;
   display: flex;
@@ -164,6 +162,7 @@
   box-shadow: -2px 2px 2px rgba(0,0,0,0.3), inset 0 0 5px rgba(0,0,0,0.3);
   border: 1px solid #3a4a20;
   cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
 }
 .buttonA:active, .buttonB:active {
   transform: translateY(2px);
@@ -175,8 +174,6 @@
   transform: rotate(25deg);
 }
 
-
-/* Start/Select Buttons */
 .startSelectArea {
   display: flex;
   justify-content: center;
@@ -199,12 +196,8 @@
   transform: rotate(-25deg);
   box-shadow: inset 0 0 3px rgba(0,0,0,0.4);
   cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
 }
 .button:active {
   box-shadow: inset 0 0 6px rgba(0,0,0,0.6);
-}
-
-/* Speaker (unchanged) */
-.speaker {
-  /* Styles from previous version */
 }
