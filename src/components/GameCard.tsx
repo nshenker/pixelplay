@@ -1,60 +1,43 @@
 import frame from "../assets/frame.png";
-import ExpandSVG from "../assets/expand.svg";
-import {GameInfo} from "@/nfts/GetNfts";
+import expandIcon from "../assets/expand.svg";
+import type { GameInfo } from "@/nfts/GetNfts";
+import styles from "./GameCard.module.css"; // 1. Import the CSS Module
 
-const GameCard = ({
-  game,
-  onClick,
-}: {
+// 2. Define a clear interface for the component's props
+interface GameCardProps {
   game: GameInfo;
   onClick: () => void;
-}) => {
+}
+
+const GameCard = ({ game, onClick }: GameCardProps) => {
   return (
-    <div style={{ position: "relative" }}>
+    // 3. Use classNames from the imported stylesheet
+    <div className={styles.cardContainer}>
       <img
         src={frame.src}
-        style={{
-          position: "absolute",
-          top: 0,
-          left: 0,
-          width: "220px",
-          height: "320px",
-          background: "white"
-        }}
-        alt={"frame"}
+        className={styles.frame}
+        alt="" // Alt text is empty as the frame is purely decorative
+        aria-hidden="true"
       />
-      <div
-        style={{
-          position: "relative",
-          top: "20px",
-          left: "20px",
-          cursor: "pointer",
-          width: "180px",
-          height: "280px",
-        }}
-        onClick={onClick}
-      >
-        <p>{game.name}</p>
+
+      {/* 4. Use a <button> for better accessibility and semantics */}
+      <button className={styles.contentWrapper} onClick={onClick}>
+        <p className={styles.gameName}>{game.name}</p>
+
         <img
-          style={{ objectFit: "scale-down" }}
-          width={"160px"}
-          height={"160px"}
+          className={styles.gameImage}
           src={game.image}
           alt={game.name}
+          width="160"
+          height="160"
         />
+
         <img
-  src={ExpandSVG.src}
-  style={{
-    position: "absolute",
-    bottom: "10px",
-    right: "10px",
-    width: "20px",
-    height: "20px",
-    filter: "brightness(0%)",
-  }}
-  alt={"expand"}
-/>
-      </div>
+          src={expandIcon.src}
+          className={styles.expandIcon}
+          alt="Expand details"
+        />
+      </button>
     </div>
   );
 };
