@@ -15,14 +15,56 @@ const Emulator = ({
   rom: string | null;
 }) => {
   const iframe = useRef<HTMLIFrameElement>(null);
-  // Use media query to scale down the entire component on smaller screens
   const isPhone = useMediaQuery({ query: "(max-width: 480px)" });
+
+  // Function to send key events to the emulator's iframe
+  const sendKeyEvent = (type: 'keydown' | 'keyup', key: string) => {
+    if (!iframe.current?.contentWindow) return;
+    const event = new KeyboardEvent(type, { key, bubbles: true });
+    iframe.current.contentWindow.document.dispatchEvent(event);
+  };
 
   const startRom = () => {
     if (!iframe.current?.contentWindow) return;
-    // The emulator logic remains the same
-    iframe.current.contentWindow.window.rom = rom!;
-    iframe.current.contentWindow.window.go();
+
+    // --- Hide the emulator's on-screen controls ---
+    // This line is hypothetical. You may need to check your emulator's
+    // documentation for the correct way to disable its on-screen UI.
+    // It might be a different property name or a function call.
+    if ('showOnScreenControls' in iframe.current.contentWindow.window) {
+      (iframe.current.contentWindow.window as any).showOnScreenControls = false;
+    }
+    
+    // Load the rom
+    (iframe.current.contentWindow.window as any).rom = rom!;
+    (iframe.current.contentWindow.window as any).go();
+  };
+
+  // Helper to create event handlers for a specific key
+  const createButtonHandlers = (key: string) => ({
+    onMouseDown: () => sendKeyEvent('keydown', key),
+    onMouseUp: () => sendKeyEvent('keyup', key),
+    onMouseLeave: () => sendKeyEvent('keyup', key), // Stop pressing if mouse leaves
+    onTouchStart: (e: React.TouchEvent) => {
+      e.preventDefault(); // Prevent scrolling/double-tap zoom
+      sendKeyEvent('keydown', key);
+    },
+    onTouchEnd: (e: React.TouchEvent) => {
+      e.preventDefault();
+      sendKeyEvent('keyup', key);
+    },
+  });
+
+  // Keyboard mappings based on your original setup
+  const controlsMap = {
+    up: createButtonHandlers('ArrowUp'),
+    down: createButtonHandlers('ArrowDown'),
+    left: createButtonHandlers('ArrowLeft'),
+    right: createButtonHandlers('ArrowRight'),
+    a: createButtonHandlers('x'),
+    b: createButtonHandlers('z'),
+    start: createButtonHandlers('Enter'),
+    select: createButtonHandlers('Shift'), // Using Shift for Select
   };
 
   return (
@@ -32,21 +74,15 @@ const Emulator = ({
       onDismiss={onDismiss}
     >
       <DialogContent
-        aria-label="Game Boy Emulator"
+        aria-label="Veridian Handheld Emulator"
         className={styles.dialogContent}
         style={{ transform: isPhone ? "scale(0.9)" : "scale(1)" }}
       >
-        {/* Main Game Boy Body */}
         <div className={styles.gameboy}>
           <div className={styles.bodyTop}>
-            <div className={styles.bodyLine} />
-            <div className={styles.bodyLine} />
-            <div className={styles.bodyLine} />
-            <div className={styles.bodyLine} />
-            <div className={styles.bodyLine} />
+            {/* Decorative lines */}
           </div>
 
-          {/* Screen Area */}
           <div className={styles.screenArea}>
             <div className={styles.powerLed}></div>
             <div className={styles.screenDisplay}>
@@ -59,49 +95,47 @@ const Emulator = ({
                 title="Emulator Screen"
               />
             </div>
-            <p className={styles.screenText}>DOT MATRIX WITH STEREO SOUND</p>
+            <p className={styles.screenText}>HIGH-RESOLUTION LCD SCREEN</p>
           </div>
 
-          {/* Logo */}
+          {/* Updated Logo */}
           <div className={styles.logo}>
-            Nintendo <span className={styles.logoGameboy}>GAME BOY</span>
-            <span className={styles.logoTm}>™</span>
+            VERIDIAN <span className={styles.logoHandheld}>HANDHELD</span>
           </div>
 
-          {/* Controls Area */}
           <div className={styles.controls}>
-            {/* D-Pad */}
-            <div className={styles.dpad}></div>
+            {/* Interactive D-Pad */}
+            <div className={styles.dpad}>
+              <div className={styles.dpadUp} {...controlsMap.up}></div>
+              <div className={styles.dpadDown} {...controlsMap.down}></div>
+              <div className={styles.dpadLeft} {...controlsMap.left}></div>
+              <div className={styles.dpadRight} {...controlsMap.right}></div>
+              <div className={styles.dpadCenter}></div>
+            </div>
 
-            {/* A & B Buttons */}
+            {/* Interactive A & B Buttons */}
             <div className={styles.abButtons}>
-              <div className={styles.buttonB}>
+              <div className={styles.buttonB} {...controlsMap.b}>
                 <span>B</span>
               </div>
-              <div className={styles.buttonA}>
+              <div className={styles.buttonA} {...controlsMap.a}>
                 <span>A</span>
               </div>
             </div>
           </div>
 
-          {/* Start/Select Buttons */}
+          {/* Interactive Start/Select Buttons */}
           <div className={styles.startSelectArea}>
-            <div className={styles.buttonSelect}>
+            <div className={styles.button} {...controlsMap.select}>
               <span>SELECT</span>
             </div>
-            <div className={styles.buttonStart}>
+            <div className={styles.button} {...controlsMap.start}>
               <span>START</span>
             </div>
           </div>
           
-          {/* Speaker Grill */}
           <div className={styles.speaker}>
-            <div className={styles.speakerLine}></div>
-            <div className={styles.speakerLine}></div>
-            <div className={styles.speakerLine}></div>
-            <div className={styles.speakerLine}></div>
-            <div className={styles.speakerLine}></div>
-            <div className={styles.speakerLine}></div>
+            {/* Speaker lines */}
           </div>
         </div>
       </DialogContent>
