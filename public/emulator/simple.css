@@ -1,15 +1,16 @@
 /*
- * Game Boy CSS Theme - v2 (Corrected Layout)
- * This version fixes the positioning of the D-Pad, A/B, and Start/Select buttons.
+ * Game Boy CSS Theme - v3 (Definitive Layout)
+ * This version uses corrected coordinates for all controls and adds decorative details.
  */
 
 :root {
-  --gb-shell: #c4cfa1; /* The classic beige-gray shell color */
-  --gb-bezel: #4c5234; /* Dark gray-green for the screen bezel */
-  --gb-buttons: #7b4668; /* The iconic dark magenta for A/B buttons */
-  --gb-dpad: #1f1f1f;   /* Dark charcoal for the D-Pad and text */
-  --gb-rubber: #757c58;  /* Gray for the Start/Select buttons */
-  --gb-screen-bg: #9bbc0f; /* The classic "pea soup" screen background */
+  --gb-shell: #d8d8d2; /* A more accurate, slightly off-white shell color */
+  --gb-bezel: #25281a;
+  --gb-buttons: #7b4668;
+  --gb-dpad: #1f1f1f;
+  --gb-rubber: #757c58;
+  --gb-screen-bg: #9bbc0f;
+  --gb-text: #3c3c54;
 }
 
 body {
@@ -30,29 +31,73 @@ body {
 
 #game {
   position: relative;
-  width: 320px;
-  height: 540px;
+  width: 340px;  /* Slightly wider for better proportions */
+  height: 580px;
   background-color: var(--gb-shell);
-  border-radius: 10px 10px 40px 10px;
-  box-shadow: 0 10px 20px rgba(0,0,0,0.3), inset 0 0 8px rgba(0,0,0,0.4);
+  border-radius: 10px 10px 60px 10px;
+  box-shadow: 0 10px 20px rgba(0,0,0,0.3), inset 0 0 15px rgba(0,0,0,0.4);
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 20px;
+  padding: 25px;
   box-sizing: border-box;
 }
 
+/* Speaker grille effect in the bottom right corner */
+#game::after {
+  content: '';
+  position: absolute;
+  bottom: 25px;
+  right: 30px;
+  width: 70px;
+  height: 50px;
+  background:
+    repeating-linear-gradient(
+      135deg,
+      #0000001a,
+      #0000001a 2px,
+      transparent 2px,
+      transparent 5px
+    );
+}
+
 #game canvas {
+  position: relative;
   background: var(--gb-screen-bg);
-  border: 18px solid var(--gb-bezel);
-  border-radius: 5px;
-  box-shadow: inset 0 0 5px rgba(0,0,0,0.5);
-  width: 250px;
-  height: 225px;
+  border: 20px solid var(--gb-bezel);
+  border-top-width: 40px; /* Thicker top bezel */
+  border-bottom-width: 25px; /* Thicker bottom bezel */
+  border-radius: 8px;
+  box-shadow: inset 0 0 8px rgba(0,0,0,0.6);
+  width: 260px;
+  height: 234px;
   object-fit: contain;
   image-rendering: pixelated;
   image-rendering: crisp-edges;
-  margin-top: 20px;
+}
+
+/* "BATTERY" light and text on the bezel */
+#game canvas::before {
+  content: 'BATTERY';
+  position: absolute;
+  top: -35px;
+  left: -5px;
+  color: var(--gb-text);
+  font-size: 10px;
+  font-weight: bold;
+  letter-spacing: 0.5px;
+}
+
+#game canvas::after {
+  content: '';
+  position: absolute;
+  top: -32px;
+  left: -15px;
+  width: 7px;
+  height: 7px;
+  background-color: #c02c21; /* Power LED color */
+  border-radius: 50%;
+  box-shadow: 0 0 4px #c02c21;
 }
 
 #controller {
@@ -65,69 +110,67 @@ body {
   opacity: 1;
 }
 
-/* --- D-Pad Styling (FIXED) --- */
+
+/* --- Controls positioning is now relative to the top of the shell --- */
+
+/* D-Pad */
 #controller_dpad {
   position: absolute;
-  bottom: 110px;
-  left: 20px;
-  width: 100px;
-  height: 100px;
+  top: 350px;
+  left: 40px;
+  width: 90px;
+  height: 90px;
 }
+#controller_dpad:before { display: none; }
 
-#controller_dpad:before {
-  display: none;
-}
-
-/* FIX: Added 'position: absolute' to correctly position the d-pad segments */
 #controller_up, #controller_down, #controller_left, #controller_right {
   position: absolute;
   background: var(--gb-dpad);
-  box-shadow: inset 2px 2px 3px rgba(255, 255, 255, 0.1), inset -2px -2px 3px rgba(0,0,0,0.5);
+  box-shadow: inset 1px 1px 3px rgba(255,255,255,0.1), inset -1px -1px 3px rgba(0,0,0,0.5);
 }
+#controller_left  { left: 0;   top: 30px; width: 30px; height: 30px; }
+#controller_right { left: 60px; top: 30px; width: 30px; height: 30px; }
+#controller_up    { left: 30px; top: 0;   width: 30px; height: 30px; }
+#controller_down  { left: 30px; top: 60px; width: 30px; height: 30px; }
 
-#controller_left { left: 0; top: 33px; width: 34px; height: 34px; border-top-left-radius: 4px; border-bottom-left-radius: 4px; }
-#controller_right { left: 66px; top: 33px; width: 34px; height: 34px; border-top-right-radius: 4px; border-bottom-right-radius: 4px; }
-#controller_up { left: 33px; top: 0; width: 34px; height: 34px; border-top-left-radius: 4px; border-top-right-radius: 4px; }
-#controller_down { left: 33px; top: 66px; width: 34px; height: 34px; border-bottom-left-radius: 4px; border-bottom-right-radius: 4px; }
-
-
-/* --- A & B Button Styling (FIXED) --- */
-/* FIX: Removed the incorrect 'transform: rotate' rule. The diagonal layout is handled purely by positioning. */
-#controller_a { position: absolute; bottom: 155px; right: 20px; }
-#controller_b { position: absolute; bottom: 115px; right: 70px; }
+/* A & B Buttons */
+#controller_b { position: absolute; top: 395px; right: 105px; }
+#controller_a { position: absolute; top: 355px; right: 55px; }
 
 .roundBtn {
-  width: 50px;
-  height: 50px;
+  width: 52px;
+  height: 52px;
   border-radius: 50%;
   background: var(--gb-buttons);
-  color: rgba(0,0,0,0.4);
-  font-size: 20px;
+  color: var(--gb-text);
+  font-size: 22px;
+  font-family: sans-serif;
   font-weight: bold;
-  line-height: 50px;
   box-shadow: 0 3px 5px rgba(0,0,0,0.3), inset 0 0 5px rgba(255,255,255,0.2);
   display: flex;
   justify-content: center;
   align-items: center;
 }
 
-/* --- Start & Select Button Styling (FIXED) --- */
-/* FIX: Removed 'transform: rotate' and adjusted positions for a correct diagonal layout in the center. */
-#controller_select { position: absolute; bottom: 70px; left: 105px; }
-#controller_start { position: absolute; bottom: 50px; left: 165px; }
+/* Start & Select Buttons */
+#controller_select { position: absolute; top: 480px; left: 110px; }
+#controller_start  { position: absolute; top: 480px; left: 170px; }
 
 .capsuleBtn {
-  width: 40px;
-  height: 16px;
-  border-radius: 8px;
+  width: 50px;
+  height: 18px;
+  border-radius: 9px;
   background: var(--gb-rubber);
-  color: rgba(0,0,0,0.4);
-  font-size: 9px;
+  color: var(--gb-text);
+  font-size: 10px;
   font-weight: bold;
+  letter-spacing: 1px;
   box-shadow: inset 0 2px 3px rgba(0,0,0,0.4);
   display: flex;
   justify-content: center;
   align-items: center;
+  /* Adds the slight angle to the buttons themselves */
+  transform: rotate(-30deg);
 }
 
 .btnPressed {
@@ -136,8 +179,11 @@ body {
   transform: scale(0.95);
 }
 
+/* Hide button press rotation on angled buttons */
+#controller_start.btnPressed, #controller_select.btnPressed {
+  transform: rotate(-30deg) scale(0.95);
+}
+
 @media only screen and (max-width: 500px) and (max-height: 400px) {
-  #game {
-    display: none;
-  }
+  #game { display: none; }
 }
