@@ -63,7 +63,7 @@ var Binjgb = (() => {
             instructionsDiv.innerHTML = `
               <div style="font-weight: bold; margin-bottom: 8px; color: #4a5568;">PC CONTROLS</div>
               <div style="margin-bottom: 4px;"><span style="font-weight: bold; background: #e2e8f0; padding: 2px 5px; border-radius: 4px; color: #2d3748;">↑↓←→</span> = MOVE</div>
-              <div><span style="font-weight: bold; background: #e2e8f0; padding: 2px 5px; border-radius: 4px; color: #2d3748;">X</span> = A | <span style="font-weight: bold; background: #e2e8f0; padding: 2px 5px; border-radius: 4px; color: #2d3748;">Z</span> = B</div>
+              <div><span style="font-weight: bold; background: #e2e8f0; padding: 2px 5px; border-radius: 4px; color: #2d3748;">A</span> = A | <span style="font-weight: bold; background: #e2e8f0; padding: 2px 5px; border-radius: 4px; color: #2d3748;">B</span> = B</div>
             `;
 
             // Style the instructions to appear directly below the scaled Game Boy.
