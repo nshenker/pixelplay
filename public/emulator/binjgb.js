@@ -10,36 +10,41 @@ var Binjgb = (() => {
     var Module = typeof Binjgb != "undefined" ? Binjgb : {};
 
     // --- FIX STARTS HERE ---
-    // Preserve any existing onRuntimeInitialized callback the user may have set.
+    // Preserve any existing onRuntimeInitialized callback.
     const existingOnRuntimeInitialized = Module['onRuntimeInitialized'];
 
     Module['onRuntimeInitialized'] = () => {
-        // Run the original callback first if it exists.
-        if (existingOnRuntimeInitialized) {
-            existingOnRuntimeInitialized();
+      // Run the original callback first if it exists.
+      if (existingOnRuntimeInitialized) {
+        existingOnRuntimeInitialized();
+      }
+
+      // Check if the device is a PC (a simple heuristic for non-touch devices).
+      const isPC = !('ontouchstart' in window || navigator.maxTouchPoints > 0);
+
+      if (isPC) {
+        // Find the canvas element the emulator is using.
+        const canvas = Module.canvas || document.getElementById('canvas');
+
+        if (canvas) {
+          // The native Game Boy resolution is 160x144.
+          // A 4x scale provides good visibility on most PC monitors.
+          const scale = 4;
+          const baseWidth = 160;
+          const baseHeight = 144;
+
+          // Set the CSS display size to make the element larger on the page.
+          // This doesn't change the canvas's internal drawing resolution.
+          canvas.style.width = `${baseWidth * scale}px`;  // Results in 640px
+          canvas.style.height = `${baseHeight * scale}px`; // Results in 576px
+
+          // Apply CSS for sharp, "pixel-perfect" scaling, which is crucial for retro games.
+          // This prevents the browser from applying blurry anti-aliasing.
+          canvas.style.imageRendering = 'pixelated';
+          canvas.style.imageRendering = '-moz-crisp-edges'; // For Firefox compatibility
+          canvas.style.imageRendering = 'crisp-edges';      // For broader compatibility
         }
-
-        // Check if the device is a PC. A simple heuristic is to see if it lacks touch capabilities.
-        const isPC = !('ontouchstart' in window || navigator.maxTouchPoints > 0);
-
-        if (isPC) {
-            // Emscripten usually associates the canvas with Module.canvas or finds an element with id="canvas".
-            const canvas = Module.canvas || document.getElementById('canvas');
-
-            if (canvas) {
-                const scale = 2; // Double the size
-                const baseWidth = 160; // Game Boy native width
-                const baseHeight = 144; // Game Boy native height
-
-                // Set the canvas element's internal resolution.
-                canvas.width = baseWidth * scale;
-                canvas.height = baseHeight * scale;
-
-                // Apply CSS for sharp pixel scaling, which is essential for retro game aesthetics.
-                canvas.style.imageRendering = 'pixelated';
-                canvas.style.imageRendering = '-moz-crisp-edges'; // For Firefox
-            }
-        }
+      }
     };
     // --- FIX ENDS HERE ---
 
