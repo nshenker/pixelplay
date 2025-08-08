@@ -8,6 +8,41 @@ var Binjgb = (() => {
     Binjgb = Binjgb || {};
 
     var Module = typeof Binjgb != "undefined" ? Binjgb : {};
+
+    // --- FIX STARTS HERE ---
+    // Preserve any existing onRuntimeInitialized callback the user may have set.
+    const existingOnRuntimeInitialized = Module['onRuntimeInitialized'];
+
+    Module['onRuntimeInitialized'] = () => {
+        // Run the original callback first if it exists.
+        if (existingOnRuntimeInitialized) {
+            existingOnRuntimeInitialized();
+        }
+
+        // Check if the device is a PC. A simple heuristic is to see if it lacks touch capabilities.
+        const isPC = !('ontouchstart' in window || navigator.maxTouchPoints > 0);
+
+        if (isPC) {
+            // Emscripten usually associates the canvas with Module.canvas or finds an element with id="canvas".
+            const canvas = Module.canvas || document.getElementById('canvas');
+
+            if (canvas) {
+                const scale = 2; // Double the size
+                const baseWidth = 160; // Game Boy native width
+                const baseHeight = 144; // Game Boy native height
+
+                // Set the canvas element's internal resolution.
+                canvas.width = baseWidth * scale;
+                canvas.height = baseHeight * scale;
+
+                // Apply CSS for sharp pixel scaling, which is essential for retro game aesthetics.
+                canvas.style.imageRendering = 'pixelated';
+                canvas.style.imageRendering = '-moz-crisp-edges'; // For Firefox
+            }
+        }
+    };
+    // --- FIX ENDS HERE ---
+
     var readyPromiseResolve, readyPromiseReject;
     Module["ready"] = new Promise(function (resolve, reject) {
       readyPromiseResolve = resolve;
