@@ -8,75 +8,40 @@ var Binjgb = (() => {
     Binjgb = Binjgb || {};
 
     var Module = typeof Binjgb != "undefined" ? Binjgb : {};
-    
-    // --- FIX V2 STARTS HERE ---
-    // Preserve any existing onRuntimeInitialized callback.
+
+    // --- FIX STARTS HERE ---
+    // Preserve any existing onRuntimeInitialized callback the user may have set.
     const existingOnRuntimeInitialized = Module['onRuntimeInitialized'];
 
     Module['onRuntimeInitialized'] = () => {
+        // Run the original callback first if it exists.
         if (existingOnRuntimeInitialized) {
             existingOnRuntimeInitialized();
         }
 
-        // Check if the device is a PC by looking for the absence of touch capabilities.
+        // Check if the device is a PC. A simple heuristic is to see if it lacks touch capabilities.
         const isPC = !('ontouchstart' in window || navigator.maxTouchPoints > 0);
-        if (!isPC) {
-            return; // Exit if on a mobile device
-        }
 
-        let resizeInterval = null;
-        let successCount = 0;
-        const targetSuccesses = 10; // We'll run the check a few times to ensure the size "sticks".
-
-        const forceResize = () => {
-            // Use a generic selector to find the canvas, which is more reliable.
-            const canvas = Module.canvas || document.querySelector('canvas');
+        if (isPC) {
+            // Emscripten usually associates the canvas with Module.canvas or finds an element with id="canvas".
+            const canvas = Module.canvas || document.getElementById('canvas');
 
             if (canvas) {
-                const scale = 2;
-                const baseWidth = 160; // Standard Game Boy width
-                const baseHeight = 144; // Standard Game Boy height
-                const targetWidth = baseWidth * scale;
-                const targetHeight = baseHeight * scale;
+                const scale = 2; // Double the size
+                const baseWidth = 160; // Game Boy native width
+                const baseHeight = 144; // Game Boy native height
 
-                // Only apply changes if the canvas size is not what we want.
-                if (canvas.width !== targetWidth || canvas.height !== targetHeight) {
-                    console.log("Attempting to resize emulator for PC...");
-                    
-                    // Set the canvas bitmap resolution
-                    canvas.width = targetWidth;
-                    canvas.height = targetHeight;
+                // Set the canvas element's internal resolution.
+                canvas.width = baseWidth * scale;
+                canvas.height = baseHeight * scale;
 
-                    // Forcefully apply CSS styles to control the display size and prevent overrides.
-                    canvas.style.setProperty('width', `${targetWidth}px`, 'important');
-                    canvas.style.setProperty('height', `${targetHeight}px`, 'important');
-                    
-                    // These help prevent CSS rules from shrinking the canvas element.
-                    canvas.style.setProperty('min-width', `${targetWidth}px`, 'important');
-                    canvas.style.setProperty('min-height', `${targetHeight}px`, 'important');
-
-                    // Force sharp, non-blurry pixels.
-                    canvas.style.setProperty('image-rendering', 'pixelated', 'important');
-                    canvas.style.setProperty('image-rendering', '-moz-crisp-edges', 'important');
-                }
-                
-                // If the size is now correct, we count it as a success.
-                if (canvas.width === targetWidth) {
-                  successCount++;
-                }
-
-                // If we've successfully set/confirmed the size multiple times, we can stop checking.
-                if (successCount >= targetSuccesses) {
-                    clearInterval(resizeInterval);
-                    console.log('Emulator resize is stable. Halting periodic checks.');
-                }
+                // Apply CSS for sharp pixel scaling, which is essential for retro game aesthetics.
+                canvas.style.imageRendering = 'pixelated';
+                canvas.style.imageRendering = '-moz-crisp-edges'; // For Firefox
             }
-        };
-
-        // Start a timer to apply our resize logic. This is robust against timing issues.
-        resizeInterval = setInterval(forceResize, 250);
+        }
     };
-    // --- FIX V2 ENDS HERE ---
+    // --- FIX ENDS HERE ---
 
     var readyPromiseResolve, readyPromiseReject;
     Module["ready"] = new Promise(function (resolve, reject) {
