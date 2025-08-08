@@ -22,9 +22,8 @@
 }
 
 /*
- * This makes the dialog container invisible,
- * letting the iframe's content show through directly.
-*/
+ * This makes the dialog container invisible and is the target for our scaling.
+ */
 .popupFrame {
   background: transparent;
   border: none;
@@ -32,12 +31,28 @@
   width: auto;
   height: auto;
   box-shadow: none;
+
+  /* Add default scale and transition for smooth resizing */
+  transform: scale(1);
+  transition: transform 0.3s ease-in-out;
 }
 
-/* This sets the size of our emulator popup */
+/* This sets the base size of our emulator popup */
 .emulator {
-  width: 340px;  /* Must match the width in the other style.css */
-  height: 580px; /* Must match the height in the other style.css */
+  width: 340px;  /* Base width */
+  height: 580px; /* Base height */
   border: none;
   display: block;
+}
+
+/* --- PC SCALING LOGIC --- */
+/*
+  This media query targets devices that support hovering (like a mouse)
+  and have enough screen height.
+*/
+@media (hover: hover) and (min-height: 700px) {
+  .popupFrame {
+    /* On PCs, this doubles the size of the container and the iframe inside it */
+    transform: scale(2);
+  }
 }
