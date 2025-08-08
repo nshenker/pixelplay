@@ -1,6 +1,6 @@
 import { Dialog, DialogContent, DialogOverlay } from "@reach/dialog";
 import { useRef } from "react";
-import styles from "./Emulator.module.css";
+import styles from "@/styles/Emulator.module.css";
 
 const Emulator = ({
   showDialog,
