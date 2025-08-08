@@ -11,7 +11,6 @@ declare global {
   }
 }
 
-// It's good practice to define this outside the component if it doesn't depend on props or state
 const creatorAddresses = process.env.NEXT_PUBLIC_CREATOR_ADDRESSES!.split(",");
 console.log("creatorAddresses", creatorAddresses);
 
