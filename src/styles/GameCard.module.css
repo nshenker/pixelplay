@@ -1,35 +1,34 @@
 /* Import a retro font for the label, if you like */
 @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
 
-/* --- The card's container, sets up perspective for the hover effect --- */
-.card {
-  position: relative; /* Crucial for positioning the 3D depth layer */
-  z-index: 2; /* Ensures the front face is on top */
-  
-  /* The cartridge shape */
-  clip-path: polygon(0% 0%, 90% 0%, 100% 10%, 100% 100%, 0% 100%);
+/* The new wrapper to create the 3D space */
+.cardWrapper {
+  perspective: 1000px;
+}
 
-  /* A more realistic plastic gradient for the front face */
+/* The main cartridge body */
+.card {
+  position: relative;
+  z-index: 2;
+  clip-path: polygon(0% 0%, 90% 0%, 100% 10%, 100% 100%, 0% 100%);
   background: linear-gradient(150deg, #5a5a5a, #404040);
-  
   border-radius: 8px;
   display: flex;
   flex-direction: column;
-  width: 250px;
+
+  /* --- CHANGE: Card is now smaller --- */
+  width: 220px;
+
   aspect-ratio: 3 / 4;
   overflow: hidden;
   cursor: pointer;
-
-  /* Subtle highlight/shadow on the edges for a molded plastic look */
-  box-shadow: inset 0 2px 2px rgba(255, 255, 255, 0.1), 
-              inset 0 -2px 2px rgba(0, 0, 0, 0.4);
-
-  /* Smoother transition for the 3D hover effect */
-  transition: transform 0.3s ease-out;
+  box-shadow: inset 0 2px 2px rgba(255, 255, 255, 0.1),
+    inset 0 -2px 2px rgba(0, 0, 0, 0.4);
+  transform-style: preserve-3d;
+  transition: transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
 }
 
-/* --- The 3D "Thickness" Layer --- */
-/* This pseudo-element creates the illusion of depth */
+/* The 3D "Thickness" Layer */
 .card::before {
   content: '';
   position: absolute;
@@ -37,41 +36,34 @@
   left: 0;
   width: 100%;
   height: 100%;
-  
-  /* Must have the same shape as the parent */
   clip-path: polygon(0% 0%, 90% 0%, 100% 10%, 100% 100%, 0% 100%);
   border-radius: 8px;
-
-  /* This is the darker plastic color of the side */
   background: #2a2a2a;
-
-  /* Push it behind the front face and move it down and to the right */
-  transform: translate(6px, 6px);
-  z-index: -1; /* Place it behind the .card element */
-  transition: transform 0.3s ease-out;
+  transform: translateZ(-20px);
+  z-index: -1;
+  transition: transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
 }
 
-/* --- 3D Hover Effect --- */
+/* --- CHANGE: Hover effect no longer tilts the card --- */
 .card:hover {
-  /* Lifts the card up for a nice interactive feel */
-  transform: translateY(-10px) rotate(3deg);
+  /* The card now only lifts up on hover */
+  transform: translateY(-10px);
 }
 
 .card:hover::before {
-  /* The depth layer moves with the card */
-  transform: translate(4px, 12px) rotate(3deg);
+  /* The depth layer's transform is updated to match */
+  transform: translateZ(-20px) translateY(5px);
 }
-
 
 /* --- Image "Sticker" Area --- */
 .imageContainer {
   flex-grow: 1;
   position: relative;
-  /* Add a recessed look to the sticker area */
   margin: 15px;
   border-radius: 5px;
   overflow: hidden;
   box-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.5);
+  transform: translateZ(1px);
 }
 
 .gameImage {
@@ -104,20 +96,19 @@
 /* --- Bottom "Label" Section --- */
 .content {
   padding: 12px;
-  background: linear-gradient(#383838, #2e2e2e); /* Darker gradient for the label */
+  background: linear-gradient(#383838, #2e2e2e);
   text-align: center;
   flex-shrink: 0;
-  /* A top border helps separate it from the image area */
   border-top: 2px solid #222;
   box-shadow: inset 0 2px 3px rgba(0, 0, 0, 0.4);
+  transform: translateZ(1px);
 }
 
 .gameName {
   margin: 0;
   color: #d0d0d0;
   font-size: 1rem;
-  /* Using a pixel font completes the retro look! */
-  font-family: 'Press Start 2P', sans-serif; 
+  font-family: 'Press Start 2P', sans-serif;
   text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.7);
   white-space: nowrap;
   overflow: hidden;
