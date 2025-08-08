@@ -20,36 +20,38 @@
   text-align: center;
 }
 
+/* --- FIX APPLIED HERE --- */
 .grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
   width: 100%;
   max-width: 1200px;
-  
-  /* This is the default gap for larger screens */
-  gap: 40px; 
+
+  /* This single line makes the grid fully responsive */
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+
+  /* This ensures a consistent gap on ALL screen sizes */
+  gap: 30px;
+
+  /* This centers the items and guarantees visible space on PC */
+  justify-items: center;
 }
 
 .gridItem {
   cursor: pointer;
-  display: flex;
-  justify-content: center;
 }
 
-/* Other styles remain the same... */
 .noGamesContainer, .noGamesText, .actionButton, .actionButton:hover {
-  /* No changes needed here */
+  /* No changes needed to these styles */
 }
 
-
-/* --- MOBILE STYLES --- */
+/* --- FIX APPLIED HERE --- */
+/* The problematic grid override has been removed from the media query */
 @media (max-width: 600px) {
   .title {
     font-size: 1.8rem;
   }
-
   .grid {
-    /* This sets the space between cartridges specifically for mobile */
+    /* We can still have a smaller gap on mobile if we want */
     gap: 20px;
   }
 }
