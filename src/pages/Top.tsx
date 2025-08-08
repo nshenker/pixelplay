@@ -35,8 +35,7 @@ export const Top = () => {
 
         {games.length > 0 && (
           <div className={styles.grid}>
-            {games.map((game, index) => (
-              {games.map((game, index) => (
+            {games.map((game, index) => 
   // The key stays on the outermost element of the loop
   <div key={index} className={styles.gridItem}>
     <GameCard
