@@ -52,7 +52,7 @@
 */
 @media (hover: hover) and (min-height: 700px) {
   .popupFrame {
-    /* On PCs, this doubles the size of the container and the iframe inside it */
-    transform: scale(2);
+    /* On PCs, this scales the container and the iframe inside it to 175% */
+    transform: scale(1.75);
   }
 }
