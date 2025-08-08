@@ -23,31 +23,40 @@ var Binjgb = (() => {
       const isPC = !('ontouchstart' in window || navigator.maxTouchPoints > 0);
 
       if (isPC) {
-        // Find the canvas element the emulator is using.
-        const canvas = Module.canvas || document.getElementById('canvas');
+        // Select the main Game Boy container and the canvas screen.
+        // We target '#gameboy' as it's the element containing the entire visual shell.
+        const gameboyContainer = document.querySelector('#gameboy');
+        const canvas = Module.canvas || document.querySelector('#canvas');
 
-        if (canvas) {
-          const scale = 6;
-          const baseWidth = 160;
-          const baseHeight = 144;
+        if (gameboyContainer && canvas) {
+          const scale = 2; // Set scale to 2 to "double the size" as requested.
 
-          // Force the canvas size using !important to override other styles.
-          canvas.style.setProperty('width', `${baseWidth * scale}px`, 'important');
-          canvas.style.setProperty('height', `${baseHeight * scale}px`, 'important');
+          // --- 1. Scale the Entire Game Boy ---
+          // We use CSS transform for scaling. It's efficient and scales the element
+          // and its children (like the canvas) proportionally without altering its internal layout.
+          gameboyContainer.style.transform = `scale(${scale})`;
           
-          // Center the canvas.
-          canvas.style.display = 'block';
-          canvas.style.margin = 'auto';
+          // Set the origin to the top center. This means it will scale from the top edge, growing down and outwards.
+          gameboyContainer.style.transformOrigin = 'top center';
 
-          // Apply CSS for sharp, "pixel-perfect" scaling.
+          // --- 2. Adjust Page Layout ---
+          // A transformed element doesn't affect the document flow, so it can overlap content below it.
+          // We must add a margin-bottom to push subsequent elements down to make space.
+          const originalHeight = gameboyContainer.offsetHeight; // Get the container's height before scaling.
+          const heightIncrease = originalHeight * (scale - 1); // The amount of extra vertical space it now occupies.
+          const extraSpacing = 40; // Add 40px of extra margin for better spacing.
+          gameboyContainer.style.marginBottom = `${heightIncrease + extraSpacing}px`;
+
+          // --- 3. Ensure the Game Screen Renders Sharply ---
+          // This prevents the browser from blurring the upscaled game pixels, keeping the retro look.
           canvas.style.imageRendering = 'pixelated';
           canvas.style.imageRendering = '-moz-crisp-edges'; // For Firefox
           canvas.style.imageRendering = 'crisp-edges';
-
-          // Add PC controls instructions.
-          const container = canvas.parentElement;
-          // Check if instructions already exist to prevent duplicates.
-          if (container && !document.getElementById('pc-controls-instructions')) {
+          
+          // --- 4. Add PC Controls Instructions ---
+          const controlsContainer = gameboyContainer.parentElement;
+          // Check if instructions already exist to prevent duplicates on re-initialization.
+          if (controlsContainer && !document.getElementById('pc-controls-instructions')) {
             const instructionsDiv = document.createElement('div');
             instructionsDiv.id = 'pc-controls-instructions';
             instructionsDiv.innerHTML = `
@@ -56,21 +65,21 @@ var Binjgb = (() => {
               <div><span style="font-weight: bold; background: #e2e8f0; padding: 2px 5px; border-radius: 4px; color: #2d3748;">X</span> = A | <span style="font-weight: bold; background: #e2e8f0; padding: 2px 5px; border-radius: 4px; color: #2d3748;">Z</span> = B</div>
             `;
 
-            // Style the instructions to appear directly below the canvas.
+            // Style the instructions to appear directly below the scaled Game Boy.
             Object.assign(instructionsDiv.style, {
-                width: `${baseWidth * scale}px`, // Match the canvas width.
-                margin: '20px auto 0 auto',    // Add top margin and center horizontally.
-                textAlign: 'center',
-                color: '#718096',
-                fontFamily: 'monospace, sans-serif',
-                fontSize: '16px',
-                lineHeight: '1.6',
-                userSelect: 'none'
+              width: `${gameboyContainer.offsetWidth}px`, // Match the original width of the Game Boy.
+              margin: '20px auto 0 auto',   // Add top margin and center horizontally.
+              textAlign: 'center',
+              color: '#718096',
+              fontFamily: 'monospace, sans-serif',
+              fontSize: '16px',
+              lineHeight: '1.6',
+              userSelect: 'none'
             });
 
-            // Insert the instructions as the next sibling of the canvas.
-            // This is more robust than absolute positioning.
-            container.insertBefore(instructionsDiv, canvas.nextSibling);
+            // Insert the instructions *after* the Game Boy container.
+            // This ensures they are not scaled along with the Game Boy itself.
+            controlsContainer.insertBefore(instructionsDiv, gameboyContainer.nextSibling);
           }
         }
       }
