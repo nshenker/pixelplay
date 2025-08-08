@@ -2,16 +2,24 @@ import { Dialog, DialogContent, DialogOverlay } from "@reach/dialog";
 import { useEffect, useRef } from "react";
 import styles from "@/styles/Emulator.module.css";
 
+// Define a type for the component's props
+type EmulatorProps = {
+  showDialog: boolean;
+  onDismiss: () => void;
+  romKey: number;
+  rom: string | null;
+};
+
 const Emulator = ({
   showDialog,
   onDismiss,
   romKey,
   rom,
-}) => {
-  const iframe = useRef(null);
+}: EmulatorProps) => { // <-- Type is applied here
+  const iframe = useRef<HTMLIFrameElement>(null);
 
   // Function to send keydown/keyup events to the emulator iframe
-  const sendInput = (type, key) => {
+  const sendInput = (type: "keydown" | "keyup", key: string) => {
     if (!iframe.current?.contentWindow) return;
 
     // We use the 'code' property for reliability, e.g., 'KeyZ', 'ArrowUp'
@@ -31,24 +39,25 @@ const Emulator = ({
       if (!iframe.current?.contentWindow) return;
       console.log("Setting ROM and starting emulator:", rom);
       // These globals are expected by the emulator in simple.html
-      iframe.current.contentWindow.window.rom = rom;
-      iframe.current.contentWindow.window.go();
+      (iframe.current.contentWindow as any).rom = rom;
+      (iframe.current.contentWindow as any).go();
     };
 
+    const currentIframe = iframe.current;
     // Wait for the iframe to load before starting the ROM
-    iframe.current.addEventListener("load", startRom);
+    currentIframe.addEventListener("load", startRom);
 
     // Cleanup the event listener when the component unmounts or re-renders
     return () => {
-      iframe.current?.removeEventListener("load", startRom);
+      currentIframe?.removeEventListener("load", startRom);
     };
   }, [showDialog, rom, romKey]);
 
   // Handlers for on-screen buttons to simulate key presses
-  const handleButtonPress = (key) => {
+  const handleButtonPress = (key: string) => {
     sendInput("keydown", key);
   };
-  const handleButtonRelease = (key) => {
+  const handleButtonRelease = (key: string) => {
     sendInput("keyup", key);
   };
 
@@ -57,6 +66,10 @@ const Emulator = ({
     cssClass,
     label,
     mapKey,
+  }: {
+    cssClass: string;
+    label?: string;
+    mapKey: string;
   }) => (
     <div
       className={cssClass}
