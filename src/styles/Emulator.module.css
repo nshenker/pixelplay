@@ -1,30 +1,43 @@
-.whiteButton {
-  border-radius: 50%;
-  background: white;
-  color: black;
-  height: 30px;
-  width: 30px;
-  font-family: "IBM Plex Mono", monospace;
-  margin: 5px;
-  paddingleft: 5px;
-  padding: 5px;
-  text-align: center;
+/*
+ * This file now only handles the popup overlay and iframe sizing.
+ * All Game Boy styling is handled by the emulator's internal CSS.
+ */
+
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: #00000099;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  animation: fade-in 0.2s ease;
 }
 
-.text {
-  font-family: "IBM Plex Mono", monospace;
-  margin: 5px;
-  padding: 5px;
+@keyframes fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
 }
 
-.pillShape {
-  width: 65px;
-  color: black;
-  height: 30px;
-  background: white;
-  border-radius: 15px;
-  font-family: "IBM Plex Mono", monospace;
-  margin: 5px;
-  padding: 5px;
-  text-align: center;
+/*
+ * This makes the dialog container invisible,
+ * letting the iframe's content show through directly.
+*/
+.popupFrame {
+  background: transparent;
+  border: none;
+  padding: 0;
+  width: auto;
+  height: auto;
+  box-shadow: none;
+}
+
+/* This sets the size of our emulator popup */
+.emulator {
+  width: 340px;  /* Must match the width in the other style.css */
+  height: 580px; /* Must match the height in the other style.css */
+  border: none;
+  display: block;
 }
