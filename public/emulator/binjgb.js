@@ -1,3 +1,4 @@
+
 var Binjgb = (() => {
   var _scriptDir =
     typeof document !== "undefined" && document.currentScript
@@ -23,136 +24,63 @@ var Binjgb = (() => {
       const isPC = !('ontouchstart' in window || navigator.maxTouchPoints > 0);
 
       if (isPC) {
-        // --- 1. Get Core Elements ---
+        // Select the main Game Boy container and the canvas screen.
+        // We target '#gameboy' as it's the element containing the entire visual shell.
         const gameboyContainer = document.querySelector('#gameboy');
         const canvas = Module.canvas || document.querySelector('#canvas');
 
         if (gameboyContainer && canvas) {
-          const scale = 2;
+          const scale = 2; // Set scale to 2 to "double the size" as requested.
 
-          // --- 2. Scale the Entire Game Boy ---
+          // --- 1. Scale the Entire Game Boy ---
+          // We use CSS transform for scaling. It's efficient and scales the element
+          // and its children (like the canvas) proportionally without altering its internal layout.
           gameboyContainer.style.transform = `scale(${scale})`;
+          
+          // Set the origin to the top center. This means it will scale from the top edge, growing down and outwards.
           gameboyContainer.style.transformOrigin = 'top center';
 
-          // --- 3. Adjust Page Layout for New Size ---
-          const originalHeight = gameboyContainer.offsetHeight;
-          const heightIncrease = originalHeight * (scale - 1);
-          const extraSpacing = 40;
+          // --- 2. Adjust Page Layout ---
+          // A transformed element doesn't affect the document flow, so it can overlap content below it.
+          // We must add a margin-bottom to push subsequent elements down to make space.
+          const originalHeight = gameboyContainer.offsetHeight; // Get the container's height before scaling.
+          const heightIncrease = originalHeight * (scale - 1); // The amount of extra vertical space it now occupies.
+          const extraSpacing = 40; // Add 40px of extra margin for better spacing.
           gameboyContainer.style.marginBottom = `${heightIncrease + extraSpacing}px`;
 
-          // --- 4. Ensure the Game Screen Renders Sharply ---
+          // --- 3. Ensure the Game Screen Renders Sharply ---
+          // This prevents the browser from blurring the upscaled game pixels, keeping the retro look.
           canvas.style.imageRendering = 'pixelated';
-          canvas.style.imageRendering = '-moz-crisp-edges';
+          canvas.style.imageRendering = '-moz-crisp-edges'; // For Firefox
           canvas.style.imageRendering = 'crisp-edges';
           
-          // --- 5. Create and Display Uniform Control Instructions ---
+          // --- 4. Add PC Controls Instructions ---
           const controlsContainer = gameboyContainer.parentElement;
+          // Check if instructions already exist to prevent duplicates on re-initialization.
           if (controlsContainer && !document.getElementById('pc-controls-instructions')) {
-            
-            // Create and inject a style block for our controls
-            const style = document.createElement('style');
-            style.id = 'binjgb-custom-styles';
-            style.textContent = `
-              #pc-controls-instructions {
-                max-width: 320px;
-                margin: 20px auto 0 auto;
-                text-align: center;
-                color: #4a5568;
-                font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-                font-size: 14px;
-                user-select: none;
-              }
-              #pc-controls-instructions kbd {
-                display: inline-block;
-                padding: 4px 8px;
-                margin: 0 3px;
-                font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
-                font-size: 0.9em;
-                font-weight: 600;
-                color: #e2e8f0;
-                background-color: #2d3748;
-                border: 1px solid #1a202c;
-                border-bottom-width: 3px;
-                border-radius: 6px;
-                box-shadow: 0 1px 0 rgba(0,0,0,0.2);
-                position: relative;
-                top: -1px;
-              }
-              #pc-controls-instructions .title {
-                font-weight: bold;
-                margin-bottom: 12px;
-                font-size: 16px;
-                color: #2d3748;
-              }
-              #pc-controls-instructions .control-row {
-                display: flex;
-                justify-content: center;
-                align-items: center;
-                margin-bottom: 10px;
-                gap: 12px;
-              }
-            `;
-            document.head.appendChild(style);
-            
-            // Create the instructions element
             const instructionsDiv = document.createElement('div');
             instructionsDiv.id = 'pc-controls-instructions';
             instructionsDiv.innerHTML = `
-              <div class="title">PC CONTROLS</div>
-              <div class="control-row">
-                <span>MOVE</span>
-                <div><kbd>↑</kbd><kbd>↓</kbd><kbd>←</kbd><kbd>→</kbd></div>
-              </div>
-              <div class="control-row">
-                <span>A Button: <kbd>A</kbd></span>
-                <span>B Button: <kbd>B</kbd></span>
-              </div>
-              <div class="control-row">
-                <span>START: <kbd>ENTER</kbd></span>
-                <span>SELECT: <kbd>SHIFT</kbd></span>
-              </div>
+              <div style="font-weight: bold; margin-bottom: 8px; color: #4a5568;">PC CONTROLS</div>
+              <div style="margin-bottom: 4px;"><span style="font-weight: bold; background: #e2e8f0; padding: 2px 5px; border-radius: 4px; color: #2d3748;">↑↓←→</span> = MOVE</div>
+              <div><span style="font-weight: bold; background: #e2e8f0; padding: 2px 5px; border-radius: 4px; color: #2d3748;">X</span> = A | <span style="font-weight: bold; background: #e2e8f0; padding: 2px 5px; border-radius: 4px; color: #2d3748;">Z</span> = B</div>
             `;
-            
-            // Insert the instructions after the Game Boy container.
+
+            // Style the instructions to appear directly below the scaled Game Boy.
+            Object.assign(instructionsDiv.style, {
+              width: `${gameboyContainer.offsetWidth}px`, // Match the original width of the Game Boy.
+              margin: '20px auto 0 auto',   // Add top margin and center horizontally.
+              textAlign: 'center',
+              color: '#718096',
+              fontFamily: 'monospace, sans-serif',
+              fontSize: '16px',
+              lineHeight: '1.6',
+              userSelect: 'none'
+            });
+
+            // Insert the instructions *after* the Game Boy container.
+            // This ensures they are not scaled along with the Game Boy itself.
             controlsContainer.insertBefore(instructionsDiv, gameboyContainer.nextSibling);
-          }
-
-          // --- 6. Add Custom Keyboard Mappings ---
-          const keyMap = {
-            'arrowup': (p) => Module._set_joyp_up(p),
-            'arrowdown': (p) => Module._set_joyp_down(p),
-            'arrowleft': (p) => Module._set_joyp_left(p),
-            'arrowright': (p) => Module._set_joyp_right(p),
-            'a': (p) => Module._set_joyp_A(p),      // Mapped to 'A' key
-            'b': (p) => Module._set_joyp_B(p),      // Mapped to 'B' key
-            'enter': (p) => Module._set_joyp_start(p),
-            'shift': (p) => Module._set_joyp_select(p),
-          };
-
-          // Keep track of pressed keys to avoid re-triggering.
-          const keysDown = new Set();
-          
-          // Add event listeners only once.
-          if (!window.binjgbKeyHandlersAttached) {
-            window.addEventListener('keydown', (e) => {
-              const key = e.key.toLowerCase();
-              if (keyMap[key] && !keysDown.has(key)) {
-                e.preventDefault();
-                keyMap[key](1); // 1 = pressed
-                keysDown.add(key);
-              }
-            });
-
-            window.addEventListener('keyup', (e) => {
-              const key = e.key.toLowerCase();
-              if (keyMap[key]) {
-                e.preventDefault();
-                keyMap[key](0); // 0 = released
-                keysDown.delete(key);
-              }
-            });
-
-            window.binjgbKeyHandlersAttached = true;
           }
         }
       }
