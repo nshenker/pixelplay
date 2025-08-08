@@ -28,7 +28,6 @@ const Emulator = ({
       isOpen={showDialog}
       onDismiss={onDismiss}
     >
-      {/* This DialogContent is now just an invisible frame */}
       <DialogContent aria-label="Game Emulator" className={styles.popupFrame}>
         <iframe
           onLoad={startRom}
@@ -37,9 +36,17 @@ const Emulator = ({
           className={styles.emulator}
           src={"/emulator/simple.html"}
           title="Emulator Screen"
-          // Set scrolling to "no" to prevent scrollbars
           scrolling="no"
         />
+        {/* Subtly display controls for PC users */}
+        <div className={styles.controlsHint}>
+          <p>
+            <strong>Move:</strong> <kbd>↑</kbd> <kbd>↓</kbd> <kbd>←</kbd> <kbd>→</kbd>
+          </p>
+          <p>
+            <strong>A Button:</strong> <kbd>X</kbd> &nbsp;|&nbsp; <strong>B Button:</strong> <kbd>Z</kbd>
+          </p>
+        </div>
       </DialogContent>
     </DialogOverlay>
   );
