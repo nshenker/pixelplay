@@ -27,28 +27,27 @@ var Binjgb = (() => {
         const canvas = Module.canvas || document.getElementById('canvas');
 
         if (canvas) {
-          // Increased scale by 1.5x for better visibility on PC monitors.
-          // Previous scale was 4, new scale is 6.
           const scale = 6;
           const baseWidth = 160;
           const baseHeight = 144;
 
-          // Set the CSS display size to make the element larger on the page.
-          canvas.style.width = `${baseWidth * scale}px`;
-          canvas.style.height = `${baseHeight * scale}px`;
+          // Force the canvas size using !important to override other styles.
+          canvas.style.setProperty('width', `${baseWidth * scale}px`, 'important');
+          canvas.style.setProperty('height', `${baseHeight * scale}px`, 'important');
+          
+          // Center the canvas.
+          canvas.style.display = 'block';
+          canvas.style.margin = 'auto';
 
           // Apply CSS for sharp, "pixel-perfect" scaling.
           canvas.style.imageRendering = 'pixelated';
           canvas.style.imageRendering = '-moz-crisp-edges'; // For Firefox
           canvas.style.imageRendering = 'crisp-edges';
 
-          // Add PC controls instructions onto the Game Boy body.
+          // Add PC controls instructions.
           const container = canvas.parentElement;
+          // Check if instructions already exist to prevent duplicates.
           if (container && !document.getElementById('pc-controls-instructions')) {
-            // Ensure the parent container can position absolute children.
-            container.style.position = 'relative';
-
-            // Create the instructions element.
             const instructionsDiv = document.createElement('div');
             instructionsDiv.id = 'pc-controls-instructions';
             instructionsDiv.innerHTML = `
@@ -57,22 +56,21 @@ var Binjgb = (() => {
               <div><span style="font-weight: bold; background: #e2e8f0; padding: 2px 5px; border-radius: 4px; color: #2d3748;">X</span> = A | <span style="font-weight: bold; background: #e2e8f0; padding: 2px 5px; border-radius: 4px; color: #2d3748;">Z</span> = B</div>
             `;
 
-            // Style the instructions to appear on the Game Boy body below the screen.
+            // Style the instructions to appear directly below the canvas.
             Object.assign(instructionsDiv.style, {
-              position: 'absolute',
-              top: `${baseHeight * scale + 30}px`, // Position below the canvas with padding.
-              width: '100%',
-              textAlign: 'center',
-              color: '#718096', // A lighter grey for the text.
-              fontFamily: 'monospace, sans-serif',
-              fontSize: '16px',
-              lineHeight: '1.6',
-              userSelect: 'none', // Prevent text selection.
-              pointerEvents: 'none', // Make sure it doesn't interfere with clicks.
+                width: `${baseWidth * scale}px`, // Match the canvas width.
+                margin: '20px auto 0 auto',    // Add top margin and center horizontally.
+                textAlign: 'center',
+                color: '#718096',
+                fontFamily: 'monospace, sans-serif',
+                fontSize: '16px',
+                lineHeight: '1.6',
+                userSelect: 'none'
             });
-            
-            // Append the instructions to the container.
-            container.appendChild(instructionsDiv);
+
+            // Insert the instructions as the next sibling of the canvas.
+            // This is more robust than absolute positioning.
+            container.insertBefore(instructionsDiv, canvas.nextSibling);
           }
         }
       }
