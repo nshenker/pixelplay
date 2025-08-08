@@ -1,24 +1,101 @@
-@import url("https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap");
+/*
+ * Top.module.css
+ * A modern, retro-themed stylesheet for the main page.
+ */
 
-.gridWrapper {
-  max-width: 800px;
-  margin: 0 auto;
-  display: flex;
-  flex-grow: 1;
-  flex-direction: column;
+/* Apply a dark, textured background to the whole page */
+:global(body) {
+  background-color: #0d1a1f;
+  background-image: radial-gradient(circle at top left, #1a3a4a 0%, #0d1a1f 40%);
+  color: #e0e0e0;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
 }
 
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem;
+  text-align: center;
+}
+
+.title {
+  font-family: 'Press Start 2P', cursive;
+  font-size: 2.5rem;
+  color: #ffffff;
+  /* A vibrant neon glow effect */
+  text-shadow:
+    0 0 5px #fff,
+    0 0 10px #fff,
+    0 0 15px #00ffff,
+    0 0 20px #00ffff,
+    0 0 25px #00ffff;
+  margin-bottom: 3rem;
+}
+
+/* This creates a fully responsive grid for the game cards */
 .grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  grid-gap: 20px;
-  list-style: none;
-  padding: 0;
-  margin: 0;
-  height: 100vh;
+  /* This creates as many 220px columns as can fit, and lets them grow */
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 2rem;
+  justify-items: center;
 }
 
-.gridItem {
-  padding: 20px;
-  text-align: center;
+/* --- Polished "Empty State" Panel --- */
+.emptyState {
+  margin-top: 4rem;
+  background: rgba(0, 0, 0, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 16px;
+  padding: 3rem 2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+}
+
+.emptyState h2 {
+  font-family: 'Press Start 2P', cursive;
+  font-size: 1.5rem;
+  margin: 0;
+  color: #fff;
+}
+
+.emptyState p {
+  margin: 0;
+  font-size: 1.1rem;
+  color: #b0b0b0;
+  max-width: 400px;
+}
+
+.actionButton {
+  font-family: 'Press Start 2P', cursive;
+  font-size: 0.8rem;
+  color: #ffffff;
+  background: #1e6a7a;
+  border: none;
+  border-radius: 8px;
+  padding: 12px 24px;
+  margin-top: 1.5rem;
+  cursor: pointer;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  transition: all 0.2s ease;
+  box-shadow: 0 4px 15px rgba(0, 255, 255, 0.1);
+}
+
+.actionButton:hover {
+  background: #2aa3bb;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(0, 255, 255, 0.2);
+}
+
+/* Responsive adjustments for the title on small screens */
+@media (max-width: 600px) {
+  .title {
+    font-size: 1.8rem;
+  }
+  .container {
+    padding: 1rem;
+  }
 }
