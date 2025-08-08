@@ -1,30 +1,215 @@
-.whiteButton {
+/*
+ * Emulator.module.css
+ * Styles for the Veridian Handheld emulator component.
+ */
+
+:root {
+  --handheld-bg: #008080; /* A classic viridian/teal */
+  --bezel-bg: #282c34;
+  --button-color: #5a2a5a; /* Dark magenta for A/B buttons */
+  --dpad-color: #1e1e1e;
+  --pill-button-color: #4a4a4a;
+  --text-color: #d0d0d0;
+  --power-led: #ff4136;
+}
+
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: #00000099;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.handheldContainer {
+  position: relative;
+  width: 400px;
+  height: 660px;
+  background-color: var(--handheld-bg);
+  border-radius: 12px 12px 60px 12px;
+  padding: 25px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  box-shadow: inset 0 0 10px #00000066, 0 10px 20px #00000044;
+  transition: transform 0.3s ease-out;
+  animation: pop-in 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+@keyframes pop-in {
+  from {
+    transform: scale(0.8);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.topSection {
+  width: 100%;
+}
+
+.screenBezel {
+  position: relative;
+  background-color: var(--bezel-bg);
+  padding: 15px;
+  border-radius: 8px;
+  box-shadow: inset 0 0 8px #00000077;
+}
+
+.powerLed {
+  position: absolute;
+  top: 25px;
+  left: -10px;
+  width: 8px;
+  height: 8px;
+  background-color: var(--power-led);
   border-radius: 50%;
-  background: white;
-  color: black;
-  height: 30px;
+  border: 1px solid #00000055;
+  box-shadow: 0 0 5px var(--power-led);
+}
+
+.screen {
+  display: block;
+  width: 100%;
+  aspect-ratio: 10 / 9; /* Classic Game Boy screen ratio */
+  border: none;
+  background: #9bbc0f; /* Classic dot-matrix screen color */
+}
+
+.branding {
+  font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+  font-weight: bold;
+  font-size: 1.5rem;
+  color: var(--text-color);
+  text-align: center;
+  margin: 10px 0;
+  letter-spacing: 1px;
+  text-shadow: 1px 1px 2px #00000055;
+}
+
+.branding span {
+  font-weight: 300;
+  font-style: italic;
+}
+
+.controlsArea {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 20px;
+}
+
+/* D-Pad: Created with a div and two pseudo-elements */
+.dPad {
+  position: relative;
+  width: 90px;
+  height: 90px;
+}
+.dPad::before, .dPad::after {
+  content: '';
+  position: absolute;
+  background-color: var(--dpad-color);
+  box-shadow: inset 2px 2px 3px #00000044, inset -2px -2px 3px #ffffff22;
+}
+.dPad::before { /* Vertical bar */
+  left: 30px;
+  top: 0;
   width: 30px;
-  font-family: "IBM Plex Mono", monospace;
-  margin: 5px;
-  paddingleft: 5px;
-  padding: 5px;
-  text-align: center;
+  height: 90px;
+  border-radius: 4px;
 }
-
-.text {
-  font-family: "IBM Plex Mono", monospace;
-  margin: 5px;
-  padding: 5px;
-}
-
-.pillShape {
-  width: 65px;
-  color: black;
+.dPad::after { /* Horizontal bar */
+  left: 0;
+  top: 30px;
+  width: 90px;
   height: 30px;
-  background: white;
-  border-radius: 15px;
-  font-family: "IBM Plex Mono", monospace;
-  margin: 5px;
-  padding: 5px;
+  border-radius: 4px;
+}
+
+.actionButtons {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  transform: rotate(-25deg);
+}
+
+.button {
+  width: 50px;
+  height: 50px;
+  background-color: var(--button-color);
+  border-radius: 50%;
+  border: 2px solid #00000033;
+  box-shadow: 3px 3px 5px #00000044, inset 0 0 5px #ffffff33;
+  font-family: sans-serif;
+  font-weight: bold;
+  color: #00000066;
   text-align: center;
+  line-height: 48px;
+  font-size: 1.2rem;
+  cursor: pointer;
+}
+
+.bottomArea {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px 0;
+}
+
+.startSelectButtons {
+  display: flex;
+  gap: 15px;
+}
+
+.pillButton {
+  position: relative;
+  width: 45px;
+  height: 18px;
+  background-color: var(--pill-button-color);
+  border-radius: 9px;
+  box-shadow: inset 1px 1px 3px #00000066;
+  cursor: pointer;
+}
+
+.pillButton::after {
+  content: attr(data-label);
+  position: absolute;
+  bottom: -18px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-family: sans-serif;
+  font-size: 0.7rem;
+  color: var(--text-color);
+  text-shadow: 1px 1px 1px #000;
+}
+
+/* Speaker grille effect */
+.speaker {
+  width: 60px;
+  height: 40px;
+  background: 
+    repeating-linear-gradient(
+      135deg,
+      #00000022,
+      #00000022 2px,
+      transparent 2px,
+      transparent 5px
+    );
+}
+
+/* Responsive adjustments for smaller screens */
+@media (max-width: 600px) {
+  .handheldContainer {
+    width: 100%;
+    height: 100%;
+    border-radius: 0;
+    padding: 5vw;
+  }
 }
