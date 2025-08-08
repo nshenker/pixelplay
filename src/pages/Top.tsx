@@ -49,10 +49,6 @@ export const Top = () => {
     />
   </div>
 ))}
-            ))}
-          </div>
-        )}
-
         {games.length === 0 && (
           <div className={styles.noGamesContainer}>
             <p className={styles.noGamesText}>
