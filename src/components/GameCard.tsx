@@ -1,6 +1,6 @@
-import frame from "../assets/frame.png";
 import ExpandSVG from "../assets/expand.svg";
-import {GameInfo} from "@/nfts/GetNfts";
+import { GameInfo } from "@/nfts/GetNfts";
+import styles from "@/styles/GameCard.module.css"; // Import the CSS module
 
 const GameCard = ({
   game,
@@ -10,50 +10,21 @@ const GameCard = ({
   onClick: () => void;
 }) => {
   return (
-    <div style={{ position: "relative" }}>
-      <img
-        src={frame.src}
-        style={{
-          position: "absolute",
-          top: 0,
-          left: 0,
-          width: "220px",
-          height: "320px",
-          background: "white"
-        }}
-        alt={"frame"}
-      />
-      <div
-        style={{
-          position: "relative",
-          top: "20px",
-          left: "20px",
-          cursor: "pointer",
-          width: "180px",
-          height: "280px",
-        }}
-        onClick={onClick}
-      >
-        <p>{game.name}</p>
+    <div className={styles.card} onClick={onClick}>
+      <div className={styles.imageContainer}>
         <img
-          style={{ objectFit: "scale-down" }}
-          width={"160px"}
-          height={"160px"}
+          className={styles.gameImage}
           src={game.image}
           alt={game.name}
         />
         <img
-  src={ExpandSVG.src}
-  style={{
-    position: "absolute",
-    bottom: "10px",
-    right: "10px",
-    width: "20px",
-    height: "20px",
-    filter: "brightness(0%)",
-  }}
-  alt={"expand"}
-/>
+          className={styles.expandIcon}
+          src={ExpandSVG.src}
+          alt="Expand"
+        />
+      </div>
+      <div className={styles.content}>
+        <h3 className={styles.gameName}>{game.name}</h3>
       </div>
     </div>
   );
