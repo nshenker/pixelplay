@@ -27,22 +27,53 @@ var Binjgb = (() => {
         const canvas = Module.canvas || document.getElementById('canvas');
 
         if (canvas) {
-          // The native Game Boy resolution is 160x144.
-          // A 4x scale provides good visibility on most PC monitors.
-          const scale = 4;
+          // Increased scale by 1.5x for better visibility on PC monitors.
+          // Previous scale was 4, new scale is 6.
+          const scale = 6;
           const baseWidth = 160;
           const baseHeight = 144;
 
           // Set the CSS display size to make the element larger on the page.
-          // This doesn't change the canvas's internal drawing resolution.
-          canvas.style.width = `${baseWidth * scale}px`;  // Results in 640px
-          canvas.style.height = `${baseHeight * scale}px`; // Results in 576px
+          canvas.style.width = `${baseWidth * scale}px`;
+          canvas.style.height = `${baseHeight * scale}px`;
 
-          // Apply CSS for sharp, "pixel-perfect" scaling, which is crucial for retro games.
-          // This prevents the browser from applying blurry anti-aliasing.
+          // Apply CSS for sharp, "pixel-perfect" scaling.
           canvas.style.imageRendering = 'pixelated';
-          canvas.style.imageRendering = '-moz-crisp-edges'; // For Firefox compatibility
-          canvas.style.imageRendering = 'crisp-edges';      // For broader compatibility
+          canvas.style.imageRendering = '-moz-crisp-edges'; // For Firefox
+          canvas.style.imageRendering = 'crisp-edges';
+
+          // Add PC controls instructions onto the Game Boy body.
+          const container = canvas.parentElement;
+          if (container && !document.getElementById('pc-controls-instructions')) {
+            // Ensure the parent container can position absolute children.
+            container.style.position = 'relative';
+
+            // Create the instructions element.
+            const instructionsDiv = document.createElement('div');
+            instructionsDiv.id = 'pc-controls-instructions';
+            instructionsDiv.innerHTML = `
+              <div style="font-weight: bold; margin-bottom: 8px; color: #4a5568;">PC CONTROLS</div>
+              <div style="margin-bottom: 4px;"><span style="font-weight: bold; background: #e2e8f0; padding: 2px 5px; border-radius: 4px; color: #2d3748;">↑↓←→</span> = MOVE</div>
+              <div><span style="font-weight: bold; background: #e2e8f0; padding: 2px 5px; border-radius: 4px; color: #2d3748;">X</span> = A | <span style="font-weight: bold; background: #e2e8f0; padding: 2px 5px; border-radius: 4px; color: #2d3748;">Z</span> = B</div>
+            `;
+
+            // Style the instructions to appear on the Game Boy body below the screen.
+            Object.assign(instructionsDiv.style, {
+              position: 'absolute',
+              top: `${baseHeight * scale + 30}px`, // Position below the canvas with padding.
+              width: '100%',
+              textAlign: 'center',
+              color: '#718096', // A lighter grey for the text.
+              fontFamily: 'monospace, sans-serif',
+              fontSize: '16px',
+              lineHeight: '1.6',
+              userSelect: 'none', // Prevent text selection.
+              pointerEvents: 'none', // Make sure it doesn't interfere with clicks.
+            });
+            
+            // Append the instructions to the container.
+            container.appendChild(instructionsDiv);
+          }
         }
       }
     };
