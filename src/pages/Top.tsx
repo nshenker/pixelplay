@@ -1,4 +1,4 @@
-ianimport styles from "@/styles/Top.module.css";
+import styles from "@/styles/Top.module.css";
 import {  useState } from "react";
 import { useGetNfts } from "@/nfts/GetNfts";
 import GameCard from "@/components/GameCard";
