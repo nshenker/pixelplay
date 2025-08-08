@@ -36,17 +36,20 @@ export const Top = () => {
         {games.length > 0 && (
           <div className={styles.grid}>
             {games.map((game, index) => (
-              <div
-                key={index}
-                className={styles.gridItem}
-                onClick={() => {
-                  setRomKey((prevCount) => prevCount + 1);
-                  setRom(games[index].rom);
-                  setShowDialog(true);
-                }}
-              >
-                <GameCard key={index} game={game} />
-              </div>
+              {games.map((game, index) => (
+  // The key stays on the outermost element of the loop
+  <div key={index} className={styles.gridItem}>
+    <GameCard
+      game={game}
+      // The onClick prop is now passed correctly to the GameCard component
+      onClick={() => {
+        setRomKey((prevCount) => prevCount + 1);
+        setRom(games[index].rom);
+        setShowDialog(true);
+      }}
+    />
+  </div>
+))}
             ))}
           </div>
         )}
