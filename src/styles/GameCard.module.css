@@ -1,0 +1,65 @@
+/* GameCard.module.css */
+
+.card {
+  width: 220px;
+  background: #ffffff;
+  border-radius: 16px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+  overflow: hidden; /* This is crucial for the border-radius to clip the image */
+  cursor: pointer;
+  transition: all 0.3s ease-in-out;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Add a hover effect to lift the card and increase its shadow */
+.card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.15);
+}
+
+.imageContainer {
+  position: relative;
+  width: 100%;
+  height: 240px; /* Taller image area for better visuals */
+}
+
+.gameImage {
+  width: 100%;
+  height: 100%;
+  object-fit: cover; /* Fills the container, cropping if necessary */
+  display: block;
+}
+
+.expandIcon {
+  position: absolute;
+  bottom: 12px;
+  right: 12px;
+  width: 28px;
+  height: 28px;
+  background: rgba(255, 255, 255, 0.8);
+  border-radius: 50%;
+  padding: 5px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+  /* Hide the icon by default and fade it in on hover */
+  opacity: 0;
+  transition: opacity 0.3s ease-in-out;
+}
+
+.card:hover .expandIcon {
+  opacity: 1; /* Show the icon when the card is hovered */
+}
+
+.content {
+  padding: 16px;
+  text-align: left;
+  /* Ensures this content area doesn't shrink */
+  flex-grow: 1;
+}
+
+.gameName {
+  margin: 0;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #333;
+}
