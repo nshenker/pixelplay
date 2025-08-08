@@ -39,27 +39,22 @@ const Top = () => {
       <main className={styles.container}>
         <h1 className={styles.title}>Veridian City Studios</h1>
 
-        // Top.tsx
-
-// ... (imports and component setup are the same)
-
-{games.length > 0 ? (
-  <div className={styles.grid}>
-    {/* Add 'index' as the second argument to map */}
-    {games.map((game, index) => (
-      <GameCard
-        key={index} // FIX: Use the 'index' as the key
-        game={game}
-        onClick={() => handleCardClick(game)}
-      />
-    ))}
-  </div>
-) : (
-  // ... (empty state JSX is the same)
-)}
+        {/* FIX: The ternary operator is now correctly structured.
+          It checks if games.length > 0. If true, it renders the grid.
+          If false, it renders the emptyState div.
+        */}
+        {games.length > 0 ? (
+          <div className={styles.grid}>
+            {games.map((game, index) => (
+              <GameCard
+                key={index} // Using index as the key
+                game={game}
+                onClick={() => handleCardClick(game)}
+              />
+            ))}
+          </div>
         ) : (
           <div className={styles.emptyState}>
-            {/* You could add a cool SVG icon here! */}
             <h2>No Games Found</h2>
             <p>It looks like you don't have any game cartridges yet.</p>
             <button
