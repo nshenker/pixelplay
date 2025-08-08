@@ -39,16 +39,24 @@ const Top = () => {
       <main className={styles.container}>
         <h1 className={styles.title}>Veridian City Studios</h1>
 
-        {games.length > 0 ? (
-          <div className={styles.grid}>
-            {games.map((game) => (
-              <GameCard
-                key={game.id} // Use a unique ID from the game data if available
-                game={game}
-                onClick={() => handleCardClick(game)}
-              />
-            ))}
-          </div>
+        // Top.tsx
+
+// ... (imports and component setup are the same)
+
+{games.length > 0 ? (
+  <div className={styles.grid}>
+    {/* Add 'index' as the second argument to map */}
+    {games.map((game, index) => (
+      <GameCard
+        key={index} // FIX: Use the 'index' as the key
+        game={game}
+        onClick={() => handleCardClick(game)}
+      />
+    ))}
+  </div>
+) : (
+  // ... (empty state JSX is the same)
+)}
         ) : (
           <div className={styles.emptyState}>
             {/* You could add a cool SVG icon here! */}
