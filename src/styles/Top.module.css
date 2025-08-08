@@ -1,21 +1,17 @@
-/* Import the pixel font at the top of your main CSS file or layout component if you haven't already */
 @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
 
-/* Main container with a dark, sophisticated background */
 .container {
   display: flex;
   flex-direction: column;
   align-items: center;
   padding: 40px 20px;
   min-height: 100vh;
-  background-color: #121212; /* A very dark charcoal for a premium feel */
   font-family: 'Press Start 2P', cursive;
 }
 
-/* Page title with a luxurious neon-gold glow */
 .title {
   font-size: 2.5rem;
-  color: #FFD700; /* Rich gold color */
+  color: #FFD700;
   text-shadow: 
     0 0 5px rgba(255, 215, 0, 0.8), 
     0 0 10px rgba(255, 215, 0, 0.6), 
@@ -24,7 +20,6 @@
   text-align: center;
 }
 
-/* Responsive grid for the game cards */
 .grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
@@ -33,14 +28,10 @@
   max-width: 1200px;
 }
 
-/* Grid item wrapper */
 .gridItem {
   cursor: pointer;
-  /* You may want to add styles to your GameCard component itself 
-     to have a border that glows on hover to match the theme. */
 }
 
-/* "No Games" state styling */
 .noGamesContainer {
   display: flex;
   flex-direction: column;
@@ -52,13 +43,12 @@
 }
 
 .noGamesText {
-  color: #a9a9a9; /* Muted silver-grey for secondary text */
+  color: #a9a9a9;
   font-size: 1rem;
   line-height: 1.6;
   max-width: 500px;
 }
 
-/* The redesigned luxurious action button */
 .actionButton {
   font-family: 'Press Start 2P', cursive;
   font-size: 0.8rem;
@@ -76,7 +66,6 @@
   transition: all 0.3s ease-in-out;
 }
 
-/* Smooth hover effect for the button */
 .actionButton:hover {
   background-color: #FFD700;
   color: #121212;
@@ -85,12 +74,11 @@
     inset 0 0 10px rgba(255, 255, 255, 0.5);
 }
 
-/* Media query for smaller screens */
 @media (max-width: 600px) {
   .title {
     font-size: 1.8rem;
   }
   .grid {
-    grid-template-columns: 1fr; /* Single column on mobile */
+    grid-template-columns: 1fr;
   }
 }
