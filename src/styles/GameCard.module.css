@@ -1,65 +1,81 @@
-/* GameCard.module.css */
-
+/* --- The main cartridge body --- */
 .card {
-  width: 220px;
-  background: #ffffff;
-  border-radius: 16px;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
-  overflow: hidden; /* This is crucial for the border-radius to clip the image */
-  cursor: pointer;
-  transition: all 0.3s ease-in-out;
+  /* This is the magic property for the shape! */
+  /* It defines a polygon: top-left, top-right (almost), the notch, bottom-right, bottom-left */
+  clip-path: polygon(0% 0%, 90% 0%, 100% 10%, 100% 100%, 0% 100%);
+
+  /* Cartridge styling */
+  background-color: #4a4a4a; /* Classic dark gray plastic color */
+  border: 2px solid #333;
+  border-radius: 8px; /* Slightly rounded corners for a softer look */
+  
+  /* Layout and Sizing */
   display: flex;
   flex-direction: column;
+  width: 250px; /* Adjust width as needed */
+  aspect-ratio: 3 / 4; /* Common card aspect ratio */
+  overflow: hidden; /* Ensures content inside respects the clip-path */
+  cursor: pointer;
+  
+  /* Cool hover effect */
+  transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
 }
 
-/* Add a hover effect to lift the card and increase its shadow */
 .card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.15);
+  transform: scale(1.03) translateY(-5px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
 }
 
+/* --- The "Sticker" or Image Area --- */
 .imageContainer {
-  position: relative;
-  width: 100%;
-  height: 240px; /* Taller image area for better visuals */
+  flex-grow: 1; /* Makes the image area take up most of the space */
+  position: relative; /* Needed to position the expand icon inside it */
+  background-color: #000; /* Fallback color while image loads */
 }
 
 .gameImage {
   width: 100%;
   height: 100%;
-  object-fit: cover; /* Fills the container, cropping if necessary */
+  object-fit: cover; /* Crucial: covers the area without stretching the image */
   display: block;
 }
 
+/* --- Expand Icon on Hover --- */
 .expandIcon {
   position: absolute;
-  bottom: 12px;
+  top: 12px;
   right: 12px;
-  width: 28px;
-  height: 28px;
-  background: rgba(255, 255, 255, 0.8);
+  width: 32px;
+  height: 32px;
+  background-color: rgba(0, 0, 0, 0.6);
   border-radius: 50%;
-  padding: 5px;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-  /* Hide the icon by default and fade it in on hover */
+  padding: 6px;
+  
+  /* Hide by default, show on hover */
   opacity: 0;
-  transition: opacity 0.3s ease-in-out;
+  transform: scale(0.8);
+  transition: opacity 0.2s ease, transform 0.2s ease;
 }
 
 .card:hover .expandIcon {
-  opacity: 1; /* Show the icon when the card is hovered */
+  opacity: 1;
+  transform: scale(1);
 }
 
+/* --- The Bottom "Label" Area --- */
 .content {
-  padding: 16px;
-  text-align: left;
-  /* Ensures this content area doesn't shrink */
-  flex-grow: 1;
+  padding: 12px;
+  background-color: #333; /* Darker bottom section */
+  text-align: center;
+  flex-shrink: 0; /* Prevents this area from shrinking */
 }
 
 .gameName {
   margin: 0;
+  color: #f0f0f0;
   font-size: 1.1rem;
-  font-weight: 600;
-  color: #333;
+  font-family: 'Press Start 2P', sans-serif; /* Optional: Use a retro font for extra style */
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
