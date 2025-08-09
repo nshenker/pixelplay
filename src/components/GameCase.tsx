@@ -14,7 +14,7 @@ interface GameCaseProps {
   games: Game[];
   isOpen: boolean;
   onOpen: () => void;
-  onClose: () => void; // The type remains a simple function with no arguments
+  onClose: () => void; // The type correctly takes no arguments
   onSelectGame: (rom: string) => void;
 }
 
@@ -26,11 +26,10 @@ const GameCase = ({
   onSelectGame,
 }: GameCaseProps) => {
 
-  // --- FIX APPLIED HERE ---
-  // This new handler will manage the click event internally
+  // This new handler manages the click event internally
   const handleClose = (e: React.MouseEvent) => {
-    e.stopPropagation(); // Prevent the click from bubbling up to the main div
-    onClose(); // Call the onClose function passed from the parent
+    e.stopPropagation(); // Prevent the click from bubbling to the parent
+    onClose();           // Call the simple function from props
   };
 
   return (
@@ -44,12 +43,14 @@ const GameCase = ({
           <p className={styles.coverText}>Click to Open</p>
         </div>
       </div>
+
       <div className={styles.caseInside}>
-        {/* The button now calls our new internal handler */}
+        {/* The button now calls the internal handler */}
         <button className={styles.closeButton} onClick={handleClose}>
           &times;
         </button>
 
+        {/* Display the grid of games if any exist */}
         {games.length > 0 && (
           <div className={styles.grid}>
             {games.map((game, index) => (
@@ -63,6 +64,7 @@ const GameCase = ({
           </div>
         )}
 
+        {/* Display a message if the user has no games */}
         {games.length === 0 && (
           <div className={styles.noGamesContainer}>
             <p className={styles.noGamesText}>No game cartridges found.</p>
