@@ -64,8 +64,10 @@ body {
 
 body {
   font-family: "Press Start 2P", cursive;
-  color: rgb(var(--foreground-rgb));
-  background-color: #121212;
+  /* Use CSS variables for a theme-aware background and color */
+  background-color: var(--page-bg, #121212);
+  color: var(--text-color-primary, #ccc);
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 a {
