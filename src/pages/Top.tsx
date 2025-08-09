@@ -1,25 +1,28 @@
 import styles from "@/styles/Top.module.css";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useGetNfts } from "@/nfts/GetNfts";
 import Emulator from "@/components/Emulator";
 import GameCase from "@/components/GameCase";
-import ThemeSelector from "@/components/ThemeSelector";
-
-// declare global {
-//   interface Window {
-//     rom: string;
-//     go: () => Promise<void>;
-//   }
-// }
+import ThemeModal from "@/components/ThemeModal";
 
 export const Top = () => {
   const [rom, setRom] = useState<string | null>(null);
   const [romKey, setRomKey] = useState(0);
   const [showEmulator, setShowEmulator] = useState(false);
   const [isCaseOpen, setIsCaseOpen] = useState(false);
-  const [theme, setTheme] = useState("veridian"); // Default theme state
+  const [theme, setTheme] = useState("veridian");
+  const [isThemeModalOpen, setIsThemeModalOpen] = useState(false);
 
   const { nfts: games } = useGetNfts();
+
+  useEffect(() => {
+    const allThemes = [
+      "veridian", "atomic-purple", "forest-green", "oceanic-blue",
+      "volcanic-red", "classic-grey", "sakura-pink", "cyber-neon"
+    ];
+    document.body.classList.remove(...allThemes);
+    document.body.classList.add(theme);
+  }, [theme]);
 
   const handleGameSelect = (selectedRom: string) => {
     setRomKey((prevKey) => prevKey + 1);
@@ -36,11 +39,22 @@ export const Top = () => {
         showDialog={showEmulator}
         onDismiss={() => setShowEmulator(false)}
       />
-      {/* The active theme class is applied here */}
-      <div className={`${styles.container} ${styles[theme]}`}>
-        <h1 className={styles.title}>Veridian City Studios</h1>
+      <ThemeModal
+        isOpen={isThemeModalOpen}
+        onClose={() => setIsThemeModalOpen(false)}
+        setTheme={setTheme}
+      />
 
-        <ThemeSelector setTheme={setTheme} />
+      <div className={styles.container}>
+        <div className={styles.header}>
+          <h1 className={styles.title}>Veridian City Studios</h1>
+          <button
+            className={styles.themeButton}
+            onClick={() => setIsThemeModalOpen(true)}
+          >
+            Themes
+          </button>
+        </div>
 
         <GameCase
           games={games}
