@@ -1,57 +1,197 @@
 @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+/* Page Container & Main Content */
+.pageContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background: linear-gradient(135deg, #1a1a2e, #16213e, #0f3460);
+  color: #e94560;
+  font-family: 'Press Start 2P', cursive; /* A classic gaming font */
+  text-align: center;
+  padding: 20px;
+  overflow: hidden;
+  position: relative;
+}
 
-.container {
+.mainContent {
+  z-index: 1;
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 40px 20px;
-  min-height: 100vh;
-  font-family: 'Press Start 2P', cursive;
+  gap: 2rem;
 }
 
 .title {
-  font-size: 2.5rem;
-  color: #FFD700;
-  text-shadow:
-    0 0 5px rgba(255, 215, 0, 0.8),
-    0 0 10px rgba(255, 215, 0, 0.6),
-    0 0 20px rgba(255, 215, 0, 0.4);
-  margin-bottom: 60px;
-  text-align: center;
+  font-size: 3.5rem;
+  text-shadow: 4px 4px 0px #000, -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
+  animation: float 3s ease-in-out infinite;
 }
 
-/* --- FIX APPLIED HERE --- */
+.subtitle {
+  font-size: 1.2rem;
+  color: #f0f0f0;
+  letter-spacing: 2px;
+}
+
+.openCaseButton {
+  background-color: #e94560;
+  color: #fff;
+  border: 3px solid #fff;
+  border-radius: 10px;
+  padding: 15px 30px;
+  font-size: 1.2rem;
+  font-family: inherit;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  transition: transform 0.2s, background-color 0.2s;
+  box-shadow: 0 5px 15px rgba(233, 69, 96, 0.4);
+}
+
+.openCaseButton:hover {
+  transform: translateY(-5px);
+  background-color: #ff5e78;
+}
+
+.gamepadIcon {
+  font-size: 1.5rem;
+}
+
+/* Modal Styles */
+.modalOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.7);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  backdrop-filter: blur(5px);
+  animation: fadeIn 0.3s ease-out;
+}
+
+.gameCaseModal {
+  background: #1a1a2e;
+  border: 5px solid #e94560;
+  border-radius: 15px;
+  width: 90%;
+  max-width: 900px;
+  max-height: 80vh;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+  animation: slideIn 0.4s ease-out;
+}
+
+.modalHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 1.5rem;
+  background-color: #0f3460;
+  border-bottom: 3px solid #e94560;
+  border-radius: 10px 10px 0 0;
+}
+
+.modalTitle {
+  font-size: 1.8rem;
+  color: #fff;
+  margin: 0;
+}
+
+.closeButton {
+  background: none;
+  border: none;
+  color: #fff;
+  font-size: 2.5rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: color 0.2s;
+}
+
+.closeButton:hover {
+  color: #e94560;
+}
+
+.modalBody {
+  padding: 2rem;
+  overflow-y: auto;
+}
+
+/* Grid for Game Cards */
 .grid {
   display: grid;
-  width: 100%;
-  max-width: 1200px;
-
-  /* This single line makes the grid fully responsive */
-  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-
-  /* This ensures a consistent gap on ALL screen sizes */
-  gap: 30px;
-
-  /* This centers the items and guarantees visible space on PC */
-  justify-items: center;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 1.5rem;
 }
 
 .gridItem {
+  transition: transform 0.2s;
+}
+
+.gridItem:hover {
+  transform: scale(1.05);
+}
+
+/* "No Games" Message */
+.noGamesContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1.5rem;
+  padding: 2rem;
+  text-align: center;
+  min-height: 300px;
+}
+
+.noGamesText {
+  color: #f0f0f0;
+  font-size: 1.1rem;
+  line-height: 1.5;
+}
+
+.actionButton {
+  background-color: #e94560;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 12px 25px;
+  font-size: 1rem;
+  font-family: inherit;
   cursor: pointer;
+  transition: background-color 0.2s;
 }
 
-.noGamesContainer, .noGamesText, .actionButton, .actionButton:hover {
-  /* No changes needed to these styles */
+.actionButton:hover {
+  background-color: #ff5e78;
 }
 
-/* --- FIX APPLIED HERE --- */
-/* The problematic grid override has been removed from the media query */
-@media (max-width: 600px) {
-  .title {
-    font-size: 1.8rem;
+
+/* Keyframe Animations */
+@keyframes float {
+  0% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+  100% { transform: translateY(0); }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideIn {
+  from {
+    transform: translateY(-50px);
+    opacity: 0;
   }
-  .grid {
-    /* We can still have a smaller gap on mobile if we want */
-    gap: 20px;
+  to {
+    transform: translateY(0);
+    opacity: 1;
   }
 }
