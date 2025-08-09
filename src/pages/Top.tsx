@@ -3,6 +3,7 @@ import { useState } from "react";
 import { useGetNfts } from "@/nfts/GetNfts";
 import GameCard from "@/components/GameCard";
 import Emulator from "@/components/Emulator";
+import { FaGamepad } from "react-icons/fa"; // Using a fun icon for the button
 
 declare global {
   interface Window {
@@ -18,60 +19,89 @@ export const Top = () => {
   const [rom, setRom] = useState<string | null>(null);
   const [romKey, setRomKey] = useState(0);
   const { nfts: games } = useGetNfts();
-  const [showDialog, setShowDialog] = useState(false);
+  const [showEmulator, setShowEmulator] = useState(false);
+  const [isGameCaseOpen, setIsGameCaseOpen] = useState(false);
 
   return (
     <>
       <Emulator
         rom={rom}
         romKey={romKey}
-        showDialog={showDialog}
+        showDialog={showEmulator}
         onDismiss={() => {
           console.log("dismissing");
-          setShowDialog(false);
+          setShowEmulator(false);
         }}
       />
-      <div className={styles.container}>
-        <h1 className={styles.title}>Veridian City Studios</h1>
 
-        {games.length > 0 && (
-          <div className={styles.grid}>
-            {games.map((game, index) => (
-              <div key={index} className={styles.gridItem}>
-                <GameCard
-                  game={game}
-                  onClick={() => {
-                    setRomKey((prevCount) => prevCount + 1);
-                    setRom(games[index].rom);
-                    setShowDialog(true);
-                  }}
-                />
-              </div>
-            ))}
-          </div>
-        )}
-
-        {games.length === 0 && (
-          <div className={styles.noGamesContainer}>
-            <p className={styles.noGamesText}>
-              It looks like you do not have any games yet.
-            </p>
-            <p className={styles.noGamesText}>
-              Click the button below to browse games!
-            </p>
-            <button
-              className={styles.actionButton}
-              onClick={() =>
-                window.open(
-                  "https://exchange.art/series/Degen%20Boy%20Cartridge%20Deployer/nfts"
-                )
-              }
-            >
-              Browse Games
-            </button>
-          </div>
-        )}
+      <div className={styles.pageContainer}>
+        <div className={styles.mainContent}>
+          <h1 className={styles.title}>Veridian City Studios</h1>
+          <p className={styles.subtitle}>Your Retro Gaming Hub</p>
+          
+          <button
+            className={styles.openCaseButton}
+            onClick={() => setIsGameCaseOpen(true)}
+          >
+            <FaGamepad className={styles.gamepadIcon} />
+            Open Game Case
+          </button>
+        </div>
       </div>
+
+      {isGameCaseOpen && (
+        <div className={styles.modalOverlay}>
+          <div className={styles.gameCaseModal}>
+            <div className={styles.modalHeader}>
+              <h2 className={styles.modalTitle}>Game Case</h2>
+              <button
+                className={styles.closeButton}
+                onClick={() => setIsGameCaseOpen(false)}
+              >
+                &times;
+              </button>
+            </div>
+            <div className={styles.modalBody}>
+              {games.length > 0 ? (
+                <div className={styles.grid}>
+                  {games.map((game, index) => (
+                    <div key={index} className={styles.gridItem}>
+                      <GameCard
+                        game={game}
+                        onClick={() => {
+                          setRomKey((prevCount) => prevCount + 1);
+                          setRom(games[index].rom);
+                          setShowEmulator(true);
+                          setIsGameCaseOpen(false); // Close case when game starts
+                        }}
+                      />
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <div className={styles.noGamesContainer}>
+                  <p className={styles.noGamesText}>
+                    Your game case is empty!
+                  </p>
+                  <p className={styles.noGamesText}>
+                    Click below to browse for new adventures.
+                  </p>
+                  <button
+                    className={styles.actionButton}
+                    onClick={() =>
+                      window.open(
+                        "https://exchange.art/series/Degen%20Boy%20Cartridge%20Deployer/nfts"
+                      )
+                    }
+                  >
+                    Browse Games
+                  </button>
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
     </>
   );
 };
