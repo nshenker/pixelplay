@@ -1,0 +1,142 @@
+/* --- Game Case Container --- */
+.gameCase {
+  position: relative;
+  width: 320px;
+  height: 400px;
+  cursor: pointer;
+  transform-style: preserve-3d;
+  transition: transform 0.8s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+  transform: rotateY(0deg);
+}
+
+/* When the case is open, we apply a 3D rotation */
+.gameCase.isOpen {
+  cursor: default;
+  transform: rotateY(-180deg);
+}
+
+/* --- Case Cover (Front) and Inside --- */
+.caseCover,
+.caseInside {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  backface-visibility: hidden; /* This hides the back of the element during rotation */
+  border-radius: 12px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+  overflow: hidden;
+}
+
+/* --- Styling for the Front Cover --- */
+.caseCover {
+  background: #2c2c2c;
+  border: 4px solid #444;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 2;
+  transform: rotateY(0deg); /* The cover faces forward initially */
+}
+
+.coverArt {
+  text-align: center;
+  border: 3px dashed #555;
+  padding: 40px 20px;
+  border-radius: 8px;
+}
+
+.coverLogo {
+  font-size: 3.5rem;
+  color: #ffd700;
+  text-shadow: 0 0 10px rgba(255, 215, 0, 0.7);
+}
+
+.coverText {
+  margin-top: 15px;
+  font-size: 1rem;
+  color: #aaa;
+}
+
+/* --- Styling for the Inside --- */
+.caseInside {
+  background: #1e1e1e;
+  border: 2px solid #555;
+  padding: 20px;
+  z-index: 1;
+  transform: rotateY(180deg); /* The inside is flipped to the back initially */
+  overflow-y: auto; /* Allow scrolling if many games */
+}
+
+/* --- Close Button --- */
+.closeButton {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  background: #444;
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 30px;
+  height: 30px;
+  font-size: 20px;
+  line-height: 28px;
+  text-align: center;
+  cursor: pointer;
+  z-index: 10;
+  transition: background 0.2s, transform 0.2s;
+}
+
+.closeButton:hover {
+  background: #ffd700;
+  color: #1e1e1e;
+  transform: scale(1.1);
+}
+
+/* --- Grid (Moved from Top.module.css) --- */
+.grid {
+  display: grid;
+  width: 100%;
+  gap: 20px;
+  justify-items: center;
+  padding-top: 40px; /* Space for close button */
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+}
+
+.gridItem {
+  cursor: pointer;
+}
+
+/* --- "No Games" state styles (Moved and adapted) --- */
+.noGamesContainer {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  text-align: center;
+  color: #ccc;
+}
+
+.noGamesText {
+  margin: 5px 0 20px 0;
+}
+
+.actionButton {
+  background-color: #ffd700;
+  color: #1a1a1a;
+  padding: 12px 24px;
+  border-radius: 8px;
+  font-family: "Press Start 2P", cursive;
+  font-size: 0.8rem;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+  border: none;
+}
+
+.actionButton:hover {
+  background-color: #fff;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(255, 215, 0, 0.4);
+}
