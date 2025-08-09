@@ -3,14 +3,14 @@ import { useState } from "react";
 import { useGetNfts } from "@/nfts/GetNfts";
 import Emulator from "@/components/Emulator";
 import GameCase from "@/components/GameCase";
-import ThemeSelector from "@/components/ThemeSelector"; // Import the new component
+import ThemeSelector from "@/components/ThemeSelector";
 
-declare global {
-  interface Window {
-    rom: string;
-    go: () => Promise<void>;
-  }
-}
+// declare global {
+//   interface Window {
+//     rom: string;
+//     go: () => Promise<void>;
+//   }
+// }
 
 export const Top = () => {
   const [rom, setRom] = useState<string | null>(null);
@@ -46,10 +46,7 @@ export const Top = () => {
           games={games}
           isOpen={isCaseOpen}
           onOpen={() => setIsCaseOpen(true)}
-          onClose={(e) => {
-            e.stopPropagation();
-            setIsCaseOpen(false);
-          }}
+          onClose={() => setIsCaseOpen(false)}
           onSelectGame={handleGameSelect}
         />
       </div>
