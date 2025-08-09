@@ -1,5 +1,6 @@
 import styles from "@/styles/GameCase.module.css";
 import GameCard from "@/components/GameCard";
+import React from "react"; // Import React for the MouseEvent type
 
 // Define the structure for the game NFT data
 interface Game {
@@ -13,7 +14,7 @@ interface GameCaseProps {
   games: Game[];
   isOpen: boolean;
   onOpen: () => void;
-  onClose: () => void;
+  onClose: () => void; // The type remains a simple function with no arguments
   onSelectGame: (rom: string) => void;
 }
 
@@ -24,27 +25,31 @@ const GameCase = ({
   onClose,
   onSelectGame,
 }: GameCaseProps) => {
+
+  // --- FIX APPLIED HERE ---
+  // This new handler will manage the click event internally
+  const handleClose = (e: React.MouseEvent) => {
+    e.stopPropagation(); // Prevent the click from bubbling up to the main div
+    onClose(); // Call the onClose function passed from the parent
+  };
+
   return (
-    // The main container for the game case. Clicking it triggers the open animation.
     <div
       className={`${styles.gameCase} ${isOpen ? styles.isOpen : ""}`}
       onClick={() => !isOpen && onOpen()}
     >
-      {/* This is the front cover of the case */}
       <div className={styles.caseCover}>
         <div className={styles.coverArt}>
           <span className={styles.coverLogo}>VCS</span>
           <p className={styles.coverText}>Click to Open</p>
         </div>
       </div>
-
-      {/* This is the inside of the case, which holds the game cards */}
       <div className={styles.caseInside}>
-        <button className={styles.closeButton} onClick={onClose}>
+        {/* The button now calls our new internal handler */}
+        <button className={styles.closeButton} onClick={handleClose}>
           &times;
         </button>
 
-        {/* Display the grid of games if any exist */}
         {games.length > 0 && (
           <div className={styles.grid}>
             {games.map((game, index) => (
@@ -58,7 +63,6 @@ const GameCase = ({
           </div>
         )}
 
-        {/* Display a message if the user has no games */}
         {games.length === 0 && (
           <div className={styles.noGamesContainer}>
             <p className={styles.noGamesText}>No game cartridges found.</p>
