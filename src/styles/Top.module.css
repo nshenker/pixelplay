@@ -1,57 +1,28 @@
-@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap");
 
 .container {
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: center; /* Center the game case vertically */
   padding: 40px 20px;
   min-height: 100vh;
-  font-family: 'Press Start 2P', cursive;
+  font-family: "Press Start 2P", cursive;
+  background-color: #121212; /* Added a dark background */
+  perspective: 1500px; /* This is crucial for the 3D effect */
 }
 
 .title {
   font-size: 2.5rem;
-  color: #FFD700;
-  text-shadow:
-    0 0 5px rgba(255, 215, 0, 0.8),
-    0 0 10px rgba(255, 215, 0, 0.6),
-    0 0 20px rgba(255, 215, 0, 0.4);
+  color: #ffd700;
+  text-shadow: 0 0 5px rgba(255, 215, 0, 0.8),
+    0 0 10px rgba(255, 215, 0, 0.6), 0 0 20px rgba(255, 215, 0, 0.4);
   margin-bottom: 60px;
   text-align: center;
 }
 
-/* --- FIX APPLIED HERE --- */
-.grid {
-  display: grid;
-  width: 100%;
-  max-width: 1200px;
-
-  /* This single line makes the grid fully responsive */
-  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-
-  /* This ensures a consistent gap on ALL screen sizes */
-  gap: 30px;
-
-  /* This centers the items and guarantees visible space on PC */
-  justify-items: center;
-}
-
-.gridItem {
-  cursor: pointer;
-}
-
-.noGamesContainer, .noGamesText, .actionButton, .actionButton:hover {
-  /* No changes needed to these styles */
-}
-
-/* --- FIX APPLIED HERE --- */
-/* The problematic grid override has been removed from the media query */
 @media (max-width: 600px) {
   .title {
     font-size: 1.8rem;
-  }
-  .grid {
-    /* We can still have a smaller gap on mobile if we want */
-    gap: 20px;
   }
 }
