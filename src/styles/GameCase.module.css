@@ -5,14 +5,20 @@
   height: 400px;
   cursor: pointer;
   transform-style: preserve-3d;
-  transition: transform 0.8s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+  transition: transform 0.9s cubic-bezier(0.4, 0.0, 0.2, 1); /* Smoother transition */
   transform: rotateY(0deg);
 }
 
-/* When the case is open, we apply a 3D rotation */
+/* Add a subtle interactive lift on hover */
+.gameCase:not(.isOpen):hover {
+  transform: scale(1.03) rotateY(-5deg);
+  box-shadow: 0 15px 40px rgba(0,0,0,0.3);
+}
+
 .gameCase.isOpen {
   cursor: default;
   transform: rotateY(-180deg);
+  box-shadow: none; /* Remove shadow when open */
 }
 
 /* --- Case Cover (Front) and Inside --- */
@@ -23,33 +29,47 @@
   left: 0;
   width: 100%;
   height: 100%;
-  backface-visibility: hidden; /* This hides the back of the element during rotation */
+  backface-visibility: hidden; /* Hides the back of the element during rotation */
   border-radius: 12px;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
   overflow: hidden;
 }
 
-/* --- Styling for the Front Cover --- */
+/* --- Enhanced Styling for the Front Cover --- */
 .caseCover {
-  background: #2c2c2c;
-  border: 4px solid #444;
+  background: linear-gradient(145deg, #3a3a3a, #202020); /* More contrast */
+  border: 1px solid #555;
   display: flex;
   justify-content: center;
   align-items: center;
   z-index: 2;
-  transform: rotateY(0deg); /* The cover faces forward initially */
+  transform: rotateY(0deg);
+  box-shadow: inset 0 0 15px rgba(0,0,0,0.4);
+}
+
+/* This pseudo-element creates the "spine" of the case for a better 3D look */
+.caseCover::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 5%;
+  width: 18px;
+  height: 90%;
+  background: linear-gradient(#2a2a2a, #1a1a1a, #2a2a2a);
+  transform: rotateY(90deg) translateZ(9px) translateX(-9px);
+  border-radius: 2px;
 }
 
 .coverArt {
   text-align: center;
-  border: 3px dashed #555;
+  border: 2px dashed #4f4f4f;
   padding: 40px 20px;
   border-radius: 8px;
+  user-select: none;
 }
 
 .coverLogo {
   font-size: 3.5rem;
-  color: #ffd700;
+  color: #FFD700;
   text-shadow: 0 0 10px rgba(255, 215, 0, 0.7);
 }
 
@@ -59,14 +79,39 @@
   color: #aaa;
 }
 
-/* --- Styling for the Inside --- */
+/* --- Enhanced Styling for the Inside --- */
 .caseInside {
   background: #1e1e1e;
-  border: 2px solid #555;
+  border: 1px solid #555;
   padding: 20px;
   z-index: 1;
-  transform: rotateY(180deg); /* The inside is flipped to the back initially */
-  overflow-y: auto; /* Allow scrolling if many games */
+  transform: rotateY(180deg);
+  box-shadow: inset 0 0 25px rgba(0,0,0,0.6); /* Deeper inner shadow */
+  overflow-y: auto;
+
+  /* Scrollbar styling for Firefox */
+  scrollbar-width: thin;
+  scrollbar-color: #444 #1e1e1e;
+}
+
+/* --- Custom Scrollbar Styling (The "Dot") --- */
+/* Works in Chrome, Safari, Edge */
+.caseInside::-webkit-scrollbar {
+  width: 8px;
+}
+
+.caseInside::-webkit-scrollbar-track {
+  background: transparent; /* Make the track invisible */
+}
+
+.caseInside::-webkit-scrollbar-thumb {
+  background-color: #444; /* The color of the "dot" */
+  border-radius: 10px;    /* Makes it a pill shape or dot */
+  border: 2px solid #1e1e1e; /* Creates space around the dot */
+}
+
+.caseInside::-webkit-scrollbar-thumb:hover {
+  background-color: #555;
 }
 
 /* --- Close Button --- */
@@ -74,9 +119,9 @@
   position: absolute;
   top: 15px;
   right: 15px;
-  background: #444;
+  background: #333;
   color: white;
-  border: none;
+  border: 1px solid #555;
   border-radius: 50%;
   width: 30px;
   height: 30px;
@@ -89,7 +134,7 @@
 }
 
 .closeButton:hover {
-  background: #ffd700;
+  background: #FFD700;
   color: #1e1e1e;
   transform: scale(1.1);
 }
@@ -124,7 +169,7 @@
 }
 
 .actionButton {
-  background-color: #ffd700;
+  background-color: #FFD700;
   color: #1a1a1a;
   padding: 12px 24px;
   border-radius: 8px;
