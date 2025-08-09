@@ -24,6 +24,7 @@ export const Top = () => {
     document.body.classList.add(theme);
   }, [theme]);
 
+
   const handleGameSelect = (selectedRom: string) => {
     setRomKey((prevKey) => prevKey + 1);
     setRom(selectedRom);
@@ -60,7 +61,10 @@ export const Top = () => {
           games={games}
           isOpen={isCaseOpen}
           onOpen={() => setIsCaseOpen(true)}
-          onClose={() => setIsCaseOpen(false)}
+          onClose={(e) => {
+            e.stopPropagation();
+            setIsCaseOpen(false);
+          }}
           onSelectGame={handleGameSelect}
         />
       </div>
