@@ -179,3 +179,12 @@
   transform: translateY(-2px);
   filter: brightness(1.1);
 }
+
+/* --- FIX APPLIED HERE --- */
+/* On screens wider than 768px, we increase the case width. */
+@media (min-width: 768px) {
+  .gameCase {
+    width: 480px;
+    height: 520px;
+  }
+}
