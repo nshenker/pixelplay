@@ -1,0 +1,57 @@
+.selectorContainer {
+  width: 100%;
+  max-width: 1200px;
+  padding: 0 20px 40px 20px;
+  text-align: center;
+  margin-top: -20px; /* Pull it a bit closer to the title */
+  margin-bottom: 40px;
+}
+
+.selectorTitle {
+  font-size: 1rem;
+  color: var(--text-color-secondary, #aaa);
+  margin-bottom: 20px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  transition: color 0.3s ease;
+}
+
+.themeGrid {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 15px;
+}
+
+.themeButton {
+  background: var(--case-interior-bg, #1e1e1e);
+  border: 1px solid var(--case-border, #555);
+  border-radius: 8px;
+  padding: 8px 12px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  transition: all 0.2s ease-in-out;
+  font-family: 'Press Start 2P', cursive;
+  font-size: 0.7rem;
+  color: var(--text-color-primary, #ccc);
+}
+
+.themeButton:hover {
+  transform: translateY(-3px);
+  border-color: var(--accent-color, #FFD700);
+  box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+}
+
+.palette {
+  display: flex;
+  gap: 4px;
+}
+
+.colorChip {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  border: 2px solid var(--case-bg, #2c2c2c);
+}
