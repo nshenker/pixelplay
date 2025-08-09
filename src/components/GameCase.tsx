@@ -1,20 +1,18 @@
 import styles from "@/styles/GameCase.module.css";
 import GameCard from "@/components/GameCard";
-import React from "react"; // Import React for the MouseEvent type
+import React from "react";
 
-// Define the structure for the game NFT data
 interface Game {
   name: string;
   image: string;
   rom: string;
 }
 
-// Define the props for the GameCase component
 interface GameCaseProps {
   games: Game[];
   isOpen: boolean;
   onOpen: () => void;
-  onClose: () => void; // The type correctly takes no arguments
+  onClose: () => void;
   onSelectGame: (rom: string) => void;
 }
 
@@ -26,10 +24,9 @@ const GameCase = ({
   onSelectGame,
 }: GameCaseProps) => {
 
-  // This new handler manages the click event internally
   const handleClose = (e: React.MouseEvent) => {
-    e.stopPropagation(); // Prevent the click from bubbling to the parent
-    onClose();           // Call the simple function from props
+    e.stopPropagation();
+    onClose();
   };
 
   return (
@@ -45,12 +42,10 @@ const GameCase = ({
       </div>
 
       <div className={styles.caseInside}>
-        {/* The button now calls the internal handler */}
         <button className={styles.closeButton} onClick={handleClose}>
           &times;
         </button>
 
-        {/* Display the grid of games if any exist */}
         {games.length > 0 && (
           <div className={styles.grid}>
             {games.map((game, index) => (
@@ -64,7 +59,6 @@ const GameCase = ({
           </div>
         )}
 
-        {/* Display a message if the user has no games */}
         {games.length === 0 && (
           <div className={styles.noGamesContainer}>
             <p className={styles.noGamesText}>No game cartridges found.</p>
