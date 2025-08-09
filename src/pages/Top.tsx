@@ -1,8 +1,8 @@
 import styles from "@/styles/Top.module.css";
 import { useState } from "react";
 import { useGetNfts } from "@/nfts/GetNfts";
-import GameCard from "@/components/GameCard";
 import Emulator from "@/components/Emulator";
+import GameCase from "@/components/GameCase"; // Import the new GameCase component
 
 declare global {
   interface Window {
@@ -15,62 +15,49 @@ const creatorAddresses = process.env.NEXT_PUBLIC_CREATOR_ADDRESSES!.split(",");
 console.log("creatorAddresses", creatorAddresses);
 
 export const Top = () => {
+  // State for the selected ROM to play
   const [rom, setRom] = useState<string | null>(null);
   const [romKey, setRomKey] = useState(0);
+
+  // State to manage the emulator dialog visibility
+  const [showEmulator, setShowEmulator] = useState(false);
+
+  // State to manage if the game case is open or closed
+  const [isCaseOpen, setIsCaseOpen] = useState(false);
+
+  // Fetch the NFT data
   const { nfts: games } = useGetNfts();
-  const [showDialog, setShowDialog] = useState(false);
+
+  // Handler for when a game card is clicked inside the case
+  const handleGameSelect = (selectedRom: string) => {
+    setRomKey((prevKey) => prevKey + 1); // Increment key to force re-render
+    setRom(selectedRom);
+    setShowEmulator(true); // Show the emulator
+    setIsCaseOpen(false); // Close the case
+  };
 
   return (
     <>
       <Emulator
         rom={rom}
         romKey={romKey}
-        showDialog={showDialog}
-        onDismiss={() => {
-          console.log("dismissing");
-          setShowDialog(false);
-        }}
+        showDialog={showEmulator}
+        onDismiss={() => setShowEmulator(false)}
       />
       <div className={styles.container}>
         <h1 className={styles.title}>Veridian City Studios</h1>
 
-        {games.length > 0 && (
-          <div className={styles.grid}>
-            {games.map((game, index) => (
-              <div key={index} className={styles.gridItem}>
-                <GameCard
-                  game={game}
-                  onClick={() => {
-                    setRomKey((prevCount) => prevCount + 1);
-                    setRom(games[index].rom);
-                    setShowDialog(true);
-                  }}
-                />
-              </div>
-            ))}
-          </div>
-        )}
-
-        {games.length === 0 && (
-          <div className={styles.noGamesContainer}>
-            <p className={styles.noGamesText}>
-              It looks like you don&apos;t have any games yet.
-            </p>
-            <p className={styles.noGamesText}>
-              Click the button below to browse games!
-            </p>
-            <button
-              className={styles.actionButton}
-              onClick={() =>
-                window.open(
-                  "https://exchange.art/series/Degen%20Boy%20Cartridge%20Deployer/nfts"
-                )
-              }
-            >
-              Browse on Exchange.art
-            </button>
-          </div>
-        )}
+        {/* Render the GameCase component */}
+        <GameCase
+          games={games}
+          isOpen={isCaseOpen}
+          onOpen={() => setIsCaseOpen(true)}
+          onClose={(e) => {
+            e.stopPropagation(); // Prevent the case's onClick from firing
+            setIsCaseOpen(false);
+          }}
+          onSelectGame={handleGameSelect}
+        />
       </div>
     </>
   );
