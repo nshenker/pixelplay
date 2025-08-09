@@ -54,7 +54,7 @@ export const Top = () => {
         {games.length === 0 && (
           <div className={styles.noGamesContainer}>
             <p className={styles.noGamesText}>
-              It looks like you don&apos;t have any games yet.
+              It looks like you do not have any games yet.
             </p>
             <p className={styles.noGamesText}>
               Click the button below to browse games!
@@ -67,7 +67,7 @@ export const Top = () => {
                 )
               }
             >
-              Browse on Exchange.art
+              Browse Games
             </button>
           </div>
         )}
