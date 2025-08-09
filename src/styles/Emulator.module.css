@@ -47,12 +47,13 @@
 
 /* --- PC SCALING LOGIC --- */
 /*
-  This media query targets devices that support hovering (like a mouse)
-  and have enough screen height.
+  This media query is now more specific to PCs by checking for
+  hover support, a minimum width, and a minimum height. This
+  prevents scaling on mobile devices.
 */
-@media (hover: hover) and (min-height: 700px) {
+@media (hover: hover) and (min-width: 1024px) and (min-height: 700px) {
   .popupFrame {
-    /* On PCs, this scales the container and the iframe inside it to 175% */
+    /* On PCs, this scales the container and the iframe inside it to 145% */
     transform: scale(1.45);
   }
 }
