@@ -12,7 +12,7 @@ interface GameCaseProps {
   games: Game[];
   isOpen: boolean;
   onOpen: () => void;
-  onClose: () => void;
+  onClose: (e: React.MouseEvent) => void;
   onSelectGame: (rom: string) => void;
 }
 
@@ -23,11 +23,6 @@ const GameCase = ({
   onClose,
   onSelectGame,
 }: GameCaseProps) => {
-
-  const handleClose = (e: React.MouseEvent) => {
-    e.stopPropagation();
-    onClose();
-  };
 
   return (
     <div
@@ -42,7 +37,7 @@ const GameCase = ({
       </div>
 
       <div className={styles.caseInside}>
-        <button className={styles.closeButton} onClick={handleClose}>
+        <button className={styles.closeButton} onClick={onClose}>
           &times;
         </button>
 
