@@ -1,24 +1,161 @@
 @import url("https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap");
 
+/* --- THEME DEFINITIONS --- */
+/* Each class sets the CSS variables for a different theme. */
+
+.veridian {
+  --page-bg: #121212;
+  --title-color: #FFD700;
+  --accent-color: #FFD700;
+  --text-color-primary: #ccc;
+  --text-color-secondary: #aaa;
+  --case-bg: linear-gradient(145deg, #3a3a3a, #202020);
+  --case-border: #555;
+  --case-spine-bg: linear-gradient(#2a2a2a, #1a1a1a, #2a2a2a);
+  --case-interior-bg: #1e1e1e;
+  --case-interior-shadow: rgba(0,0,0,0.6);
+  --button-bg: #333;
+  --button-text: #fff;
+  --scrollbar-thumb: #444;
+}
+
+.atomic-purple {
+  --page-bg: #2b1d36;
+  --title-color: #97E25F;
+  --accent-color: #97E25F;
+  --text-color-primary: #e0dce3;
+  --text-color-secondary: #b0a8b8;
+  --case-bg: linear-gradient(145deg, #583c7a, #402758);
+  --case-border: #7c6c8c;
+  --case-spine-bg: linear-gradient(#402758, #2b1d36, #402758);
+  --case-interior-bg: #402758;
+  --case-interior-shadow: rgba(0,0,0,0.5);
+  --button-bg: #583c7a;
+  --button-text: #fff;
+  --scrollbar-thumb: #7c6c8c;
+}
+
+.forest-green {
+  --page-bg: #1e2d24;
+  --title-color: #D4B483;
+  --accent-color: #D4B483;
+  --text-color-primary: #e8e3da;
+  --text-color-secondary: #b5ad9f;
+  --case-bg: linear-gradient(145deg, #42614a, #2A3F30);
+  --case-border: #647b6a;
+  --case-spine-bg: linear-gradient(#2A3F30, #1e2d24, #2A3F30);
+  --case-interior-bg: #2A3F30;
+  --case-interior-shadow: rgba(0,0,0,0.6);
+  --button-bg: #42614a;
+  --button-text: #fff;
+  --scrollbar-thumb: #647b6a;
+}
+
+.oceanic-blue {
+  --page-bg: #031326;
+  --title-color: #A5C9CA;
+  --accent-color: #A5C9CA;
+  --text-color-primary: #e0e8f0;
+  --text-color-secondary: #a3b0be;
+  --case-bg: linear-gradient(145deg, #194373, #0B2447);
+  --case-border: #395a85;
+  --case-spine-bg: linear-gradient(#0B2447, #031326, #0B2447);
+  --case-interior-bg: #0B2447;
+  --case-interior-shadow: rgba(0,0,0,0.5);
+  --button-bg: #194373;
+  --button-text: #fff;
+  --scrollbar-thumb: #395a85;
+}
+
+.volcanic-red {
+  --page-bg: #1a0000;
+  --title-color: #FF4500;
+  --accent-color: #FF4500;
+  --text-color-primary: #e8d8d8;
+  --text-color-secondary: #b5a8a8;
+  --case-bg: linear-gradient(145deg, #5a0000, #3C0000);
+  --case-border: #8c3c3c;
+  --case-spine-bg: linear-gradient(#3C0000, #1a0000, #3C0000);
+  --case-interior-bg: #3C0000;
+  --case-interior-shadow: rgba(0,0,0,0.6);
+  --button-bg: #5a0000;
+  --button-text: #fff;
+  --scrollbar-thumb: #8c3c3c;
+}
+
+.classic-grey {
+  --page-bg: #d3d3d3;
+  --title-color: #0F0F0F;
+  --accent-color: #0F0F0F;
+  --text-color-primary: #222;
+  --text-color-secondary: #444;
+  --case-bg: linear-gradient(145deg, #8c8c8c, #585858);
+  --case-border: #a0a0a0;
+  --case-spine-bg: linear-gradient(#585858, #404040, #585858);
+  --case-interior-bg: #C0C0C0;
+  --case-interior-shadow: rgba(0,0,0,0.3);
+  --button-bg: #8c8c8c;
+  --button-text: #000;
+  --scrollbar-thumb: #8c8c8c;
+}
+
+.sakura-pink {
+  --page-bg: #382E38;
+  --title-color: #FFB7C5;
+  --accent-color: #FFB7C5;
+  --text-color-primary: #F5E6E8;
+  --text-color-secondary: #d3c4c6;
+  --case-bg: linear-gradient(145deg, #876d74, #6D545D);
+  --case-border: #a58e94;
+  --case-spine-bg: linear-gradient(#6D545D, #534046, #6D545D);
+  --case-interior-bg: #6D545D;
+  --case-interior-shadow: rgba(0,0,0,0.4);
+  --button-bg: #876d74;
+  --button-text: #fff;
+  --scrollbar-thumb: #a58e94;
+}
+
+.cyber-neon {
+  --page-bg: #0d0221;
+  --title-color: #00f6ff;
+  --accent-color: #f038ff;
+  --text-color-primary: #e6dffc;
+  --text-color-secondary: #b8a9e0;
+  --case-bg: linear-gradient(145deg, #2a1559, #1b0c3b);
+  --case-border: #f038ff;
+  --case-spine-bg: linear-gradient(#1b0c3b, #0d0221, #1b0c3b);
+  --case-interior-bg: #1b0c3b;
+  --case-interior-shadow: rgba(240, 56, 255, 0.3);
+  --button-bg: #2a1559;
+  --button-text: #fff;
+  --scrollbar-thumb: #f038ff;
+}
+
+/* --- BASE STYLES --- */
+/* These styles now use the CSS variables defined above. */
+
 .container {
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center; /* Center the game case vertically */
   padding: 40px 20px;
   min-height: 100vh;
-  font-family: "Press Start 2P", cursive;
-  background-color: #121212; /* Added a dark background */
-  perspective: 1500px; /* This is crucial for the 3D effect */
+  font-family: 'Press Start 2P', cursive;
+  background-color: var(--page-bg);
+  perspective: 1500px;
+  transition: background-color 0.3s ease;
 }
 
 .title {
   font-size: 2.5rem;
-  color: #ffd700;
-  text-shadow: 0 0 5px rgba(255, 215, 0, 0.8),
-    0 0 10px rgba(255, 215, 0, 0.6), 0 0 20px rgba(255, 215, 0, 0.4);
-  margin-bottom: 60px;
+  color: var(--title-color);
+  text-shadow:
+    0 0 5px var(--accent-color),
+    0 0 10px var(--accent-color),
+    0 0 20px rgba(255, 215, 0, 0.4);
+  margin-bottom: 40px;
   text-align: center;
+  transition: color 0.3s ease, text-shadow 0.3s ease;
 }
 
 @media (max-width: 600px) {
